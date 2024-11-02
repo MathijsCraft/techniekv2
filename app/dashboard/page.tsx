@@ -17,7 +17,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TriangleAlert } from 'lucide-react';
 import UpcomingEvents from '@/components/ui/upcoming-events';
 
-export default function Page() {
+export default function Page2() {
   return (
     <SidebarProvider>
       <AppSidebar />
