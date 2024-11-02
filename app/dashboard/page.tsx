@@ -49,8 +49,9 @@ export default function Page() {
   Er zijn nog steeds defecte fixtures gerapporteerd. Dien zo snel mogelijk een reparatieverzoek in.
   </AlertDescription>
 </Alert>
+<UpcomingEvents />
           <div className="grid auto-rows-min gap-4 md:grid-cols-2">
-            <UpcomingEvents />
+            
             <div className="aspect-video rounded-xl bg-muted/50" />
             <div className="aspect-video rounded-xl bg-muted/50" />
             <div className="aspect-video rounded-xl bg-muted/50" />

@@ -1,4 +1,5 @@
-'use client'
+"use client"
+
 import { useEffect, useState } from "react"
 import { fetchICalEvents } from "@/lib/googleCalendar"
 import {
@@ -19,6 +20,8 @@ type Event = {
   start: Date
   end: Date
   location: string
+  isAllDay: boolean
+  isMultiDay: boolean
 }
 
 const ICAL_URL = "https://calendar.google.com/calendar/ical/f398de90eb2efc7b27f1207bbdc7acc865ab3368671406700f14d6044d17fc02%40group.calendar.google.com/private-5b580a353f359745cf2c018ad7738354/basic.ics"
@@ -28,37 +31,43 @@ export default function UpcomingEvents() {
 
   useEffect(() => {
     async function loadEvents() {
-      const fetchedEvents = await fetchICalEvents(ICAL_URL)
-      setEvents(fetchedEvents)
+      try {
+        const fetchedEvents = await fetchICalEvents(ICAL_URL)
+        setEvents(fetchedEvents)
+      } catch (error) {
+        console.error("Error fetching iCal events:", error)
+      }
     }
 
     loadEvents()
   }, [])
 
   const formatDate = (date: Date): string => {
-    const options: Intl.DateTimeFormatOptions = { weekday: "short", month: "short", day: "numeric" }
-    return date.toLocaleDateString("en-US", options)
+    const options: Intl.DateTimeFormatOptions = { weekday: "long", month: "short", day: "numeric" }
+    const formattedDate = date.toLocaleDateString("nl-NL", options)
+    
+    // Capitalize the first letter of each word
+    return formattedDate.replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
   const formatTime = (date: Date): string => {
-    const options: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit" }
-    return date.toLocaleTimeString("en-US", options)
+    const options: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit", hour12: false }
+    return date.toLocaleTimeString("nl-NL", options)
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <Card className="w-full max-w-full mx-auto">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold">Upcoming Events</CardTitle>
+        <CardTitle className="text-2xl font-bold">Aankomende Evenementen</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
-          <TableCaption>Your upcoming events from iCal feed.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[200px]">Event</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Time</TableHead>
-              <TableHead>Location</TableHead>
+              <TableHead className="w-[200px]">Evenement</TableHead>
+              <TableHead>Datum</TableHead>
+              <TableHead>Tijd</TableHead>
+              <TableHead>Locatie</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -68,13 +77,23 @@ export default function UpcomingEvents() {
                 <TableCell>
                   <div className="flex items-center">
                     <Calendar className="mr-2 h-4 w-4" />
-                    {formatDate(event.start)}
+                    {event.isAllDay ? (
+                      formatDate(event.start) // Show only the start date for all-day events
+                    ) : event.isMultiDay ? (
+                      `${formatDate(event.start)} - ${formatDate(event.end)}`
+                    ) : (
+                      formatDate(event.start)
+                    )}
                   </div>
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center">
                     <Clock className="mr-2 h-4 w-4" />
-                    {formatTime(event.start)} - {formatTime(event.end)}
+                    {event.isAllDay || (event.start.getHours() === 0 && event.end.getHours() === 0) ? (
+                      "Hele Dag" // Show "Hele Dag" for all-day events and those from 00:00 to 00:00
+                    ) : (
+                      `${formatTime(event.start)} - ${formatTime(event.end)}`
+                    )}
                   </div>
                 </TableCell>
                 <TableCell>{event.location}</TableCell>
