@@ -43,7 +43,7 @@ export default function Page2() {
           <UpcomingEvents />
 
           <div>
-            {' '}
+            <h2 className='text-2xl font-bold'>Problemen</h2>
             <Alert variant='destructive'>
               <TriangleAlert className='h-4 w-4' />
               <AlertTitle>!! Let Op !!</AlertTitle>
