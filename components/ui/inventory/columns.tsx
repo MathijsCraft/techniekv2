@@ -20,9 +20,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 import { Badge } from '@/components/ui/badge';
 
@@ -130,7 +130,9 @@ export const columns: ColumnDef<Inventory>[] = [
             <DropdownMenuItem onClick={() => handleStatusChange('Werkend')}>
               Werkend
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleStatusChange('Ter Reparatie')}>
+            <DropdownMenuItem
+              onClick={() => handleStatusChange('Ter Reparatie')}
+            >
               Ter Reparatie
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleStatusChange('Defect')}>
@@ -155,78 +157,103 @@ export const columns: ColumnDef<Inventory>[] = [
       return (
         <Dialog>
           <DialogTrigger asChild>
-            <Button><Pencil /> Bewerken</Button>
+            <Button>
+              <Pencil /> Bewerken
+            </Button>
           </DialogTrigger>
-          <DialogContent className="w-[800px] md:max-w-full sm:max-w-[425px]">
+          <DialogContent className='w-[800px] sm:max-w-[425px] md:max-w-full'>
             <DialogHeader>
-              <DialogTitle>Fixture: Showtec Phantom 75 nummer {inventory.nummer}</DialogTitle>
+              <DialogTitle>
+                Fixture: Showtec Phantom 75 nummer {inventory.nummer}
+              </DialogTitle>
               <DialogDescription>
-                Maak aanpassingen aan de gekozen fixture, let op dit kan niet ongedaan worden!
+                Maak aanpassingen aan de gekozen fixture, let op dit kan niet
+                ongedaan worden!
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-2 gap-8">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="id" className="text-right">
+            <div className='grid gap-4 py-4'>
+              <div className='grid grid-cols-2 gap-8'>
+                <div className='grid grid-cols-4 items-center gap-4'>
+                  <Label htmlFor='id' className='text-right'>
                     ID
                   </Label>
-                  <Input id="id" placeholder={inventory.id} className="col-span-3" />
+                  <Input
+                    id='id'
+                    placeholder={inventory.id}
+                    className='col-span-3'
+                  />
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="nummer" className="text-right">
+                <div className='grid grid-cols-4 items-center gap-4'>
+                  <Label htmlFor='nummer' className='text-right'>
                     Nummer
                   </Label>
-                  <Input id="nummer" type='number' value={inventory.nummer} className="col-span-3" />
-                </div>
-
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="locatie" className="text-right">
-                    Locatie
-                  </Label>
-                  <Input id="locatie" placeholder={inventory.locatie} className="col-span-3" />
-                </div>
-
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="status" className="text-right">
-                    Status
-                  </Label>
-                  <select
-                    id="status"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value as Status)}
-                    className="col-span-3 p-2 border rounded"
-                  >
-                    <option value="Werkend">Werkend</option>
-                    <option value="Ter Reparatie">Ter Reparatie</option>
-                    <option value="Defect">Defect</option>
-                  </select>
-                </div>
-
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="dmx" className="text-right">
-                    DMX Startadres
-                  </Label>
                   <Input
-                    id="dmx"
+                    id='nummer'
                     type='number'
-                    min="1"
-                    max="512"
-                    value={dmx}
-                    onChange={(e) => setDmx(Math.max(1, Math.min(512, Number(e.target.value))))}
-                    className="col-span-3"
+                    value={inventory.nummer}
+                    className='col-span-3'
                   />
                 </div>
 
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="channels" className="text-right">
+                <div className='grid grid-cols-4 items-center gap-4'>
+                  <Label htmlFor='locatie' className='text-right'>
+                    Locatie
+                  </Label>
+                  <Input
+                    id='locatie'
+                    placeholder={inventory.locatie}
+                    className='col-span-3'
+                  />
+                </div>
+
+                <div className='grid grid-cols-4 items-center gap-4'>
+                  <Label htmlFor='status' className='text-right'>
+                    Status
+                  </Label>
+                  <select
+                    id='status'
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value as Status)}
+                    className='col-span-3 rounded border p-2'
+                  >
+                    <option value='Werkend'>Werkend</option>
+                    <option value='Ter Reparatie'>Ter Reparatie</option>
+                    <option value='Defect'>Defect</option>
+                  </select>
+                </div>
+
+                <div className='grid grid-cols-4 items-center gap-4'>
+                  <Label htmlFor='dmx' className='text-right'>
+                    DMX Startadres
+                  </Label>
+                  <Input
+                    id='dmx'
+                    type='number'
+                    min='1'
+                    max='512'
+                    value={dmx}
+                    onChange={(e) =>
+                      setDmx(Math.max(1, Math.min(512, Number(e.target.value))))
+                    }
+                    className='col-span-3'
+                  />
+                </div>
+
+                <div className='grid grid-cols-4 items-center gap-4'>
+                  <Label htmlFor='channels' className='text-right'>
                     Kanalen
                   </Label>
-                  <Input id="channels" type='number' placeholder="1" className="col-span-3" />
+                  <Input
+                    id='channels'
+                    type='number'
+                    placeholder='1'
+                    className='col-span-3'
+                  />
                 </div>
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">Opslaan</Button>
+              <Button type='submit'>Opslaan</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
