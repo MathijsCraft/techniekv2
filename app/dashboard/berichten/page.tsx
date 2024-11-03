@@ -1,13 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import {
-  AlertCircle,
-  Download,
-  FileText,
-  Mail,
-  Search,
-} from 'lucide-react';
+import { AlertCircle, Download, FileText, Mail, Search } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -29,7 +23,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 
 import { AppSidebar } from '@/components/app-sidebar';
 import {
@@ -152,7 +146,7 @@ export default function InboxPage() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset className="flex flex-col overflow-hidden">
+      <SidebarInset className='flex flex-col overflow-hidden'>
         <header className='flex h-16 shrink-0 items-center gap-2 border-b'>
           <div className='flex items-center gap-2 px-4'>
             <SidebarTrigger className='-ml-1' />
@@ -171,7 +165,7 @@ export default function InboxPage() {
           </div>
         </header>
         <div className='flex flex-1 overflow-hidden'>
-          <div className='w-full border-r md:w-1/3 flex flex-col'>
+          <div className='flex w-full flex-col border-r md:w-1/3'>
             <div className='p-4'>
               <form>
                 <div className='relative'>
@@ -210,7 +204,7 @@ export default function InboxPage() {
               ))}
             </ScrollArea>
           </div>
-          <div className='hidden flex-col p-4 md:flex md:w-2/3 overflow-auto'>
+          <div className='hidden flex-col overflow-auto p-4 md:flex md:w-2/3'>
             {selectedMessage ? (
               <>
                 <div className='mb-4 flex items-center justify-between'>
@@ -234,12 +228,17 @@ export default function InboxPage() {
                 </div>
                 <Separator className='my-4' />
                 <p className='mb-4'>{selectedMessage.content}</p>
-                {selectedMessage.type === 'alert' && selectedMessage.equipmentData && (
-                  <div className='mt-4'>
-                    <h3 className='text-lg font-semibold mb-2'>Defecte Apparatuur Details</h3>
-                    <DefectiveEquipmentTable data={selectedMessage.equipmentData} />
-                  </div>
-                )}
+                {selectedMessage.type === 'alert' &&
+                  selectedMessage.equipmentData && (
+                    <div className='mt-4'>
+                      <h3 className='mb-2 text-lg font-semibold'>
+                        Defecte Apparatuur Details
+                      </h3>
+                      <DefectiveEquipmentTable
+                        data={selectedMessage.equipmentData}
+                      />
+                    </div>
+                  )}
               </>
             ) : (
               <div className='flex h-full items-center justify-center text-muted-foreground'>
@@ -268,19 +267,24 @@ export default function InboxPage() {
                   {selectedMessage.sender} - {selectedMessage.time}
                 </DialogDescription>
               </DialogHeader>
-              <ScrollArea className='h-[300px] mt-4'>
+              <ScrollArea className='mt-4 h-[300px]'>
                 <p className='mb-4'>{selectedMessage.content}</p>
-                {selectedMessage.type === 'alert' && selectedMessage.equipmentData && (
-                  <div className='mt-4'>
-                    <h3 className='text-lg font-semibold mb-2'>Defecte Apparatuur Details</h3>
-                    <DefectiveEquipmentTable data={selectedMessage.equipmentData} />
-                  </div>
-                )}
+                {selectedMessage.type === 'alert' &&
+                  selectedMessage.equipmentData && (
+                    <div className='mt-4'>
+                      <h3 className='mb-2 text-lg font-semibold'>
+                        Defecte Apparatuur Details
+                      </h3>
+                      <DefectiveEquipmentTable
+                        data={selectedMessage.equipmentData}
+                      />
+                    </div>
+                  )}
               </ScrollArea>
               {selectedMessage.type === 'request' && (
                 <Button
                   onClick={() => downloadPDF(selectedMessage)}
-                  className='w-full mt-4'
+                  className='mt-4 w-full'
                 >
                   <Download className='mr-2 h-4 w-4' />
                   Download PDF
