@@ -176,7 +176,7 @@ export const columns: ColumnDef<Inventory>[] = [
                   <Label htmlFor="nummer" className="text-right">
                     Nummer
                   </Label>
-                  <Input id="nummer" type='number' placeholder={inventory.nummer} className="col-span-3" />
+                  <Input id="nummer" type='number' value={inventory.nummer} className="col-span-3" />
                 </div>
 
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -211,7 +211,7 @@ export const columns: ColumnDef<Inventory>[] = [
                     type='number'
                     min="1"
                     max="512"
-                    placeholder={dmx}
+                    value={dmx}
                     onChange={(e) => setDmx(Math.max(1, Math.min(512, Number(e.target.value))))}
                     className="col-span-3"
                   />

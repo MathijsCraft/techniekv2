@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+// User roles enumeration
+enum UserRole {
+  SUPER_ADMIN
+  OWNER
+  TEAM
+}
+
+// Enum for Status (can be reused in Lighting and Sound)
+enum Status {
+  WERKEND
+  TER_REPARATIE
+  DEFECT
+}
+
+// User model to manage admin accounts
+model User {
+  id        String    @id @default(cuid()) @db.VarChar(255)
+  name      String    @db.VarChar(255)
+  email     String    @unique @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  role      UserRole  @default(TEAM)
+  createdAt DateTime  @default(now()) @db.DateTime(3)
+  updatedAt DateTime? @updatedAt @db.DateTime(3)
+
+  @@index([email])
+  @@map("users")
+}
+
+// Lighting catalog model for storing lighting brand information
+model LightingCatalog {
+  id                String              @id @default(cuid()) @db.VarChar(255)
+  tag               String              @unique @db.VarChar(255)
+  brand             String              @db.VarChar(255)
+  type              String              @db.VarChar(255)
+  extraInfo         String?             @db.VarChar(255)
+  LightingInventory LightingInventory[]
+
+  @@index([tag])
+  @@map("lightingcatalog")
+}
+
+// Lighting model for tracking inventory items
+model LightingInventory {
+  id        String          @id @default(cuid()) @db.VarChar(255)
+  tag       String          @db.VarChar(255)
+  label     LightingCatalog @relation(fields: [tag], references: [tag])
+  number    Int             @default(1) @db.Int()
+  locatie   String          @db.VarChar(255)
+  status    Status          @default(WERKEND)
+  dmx       Int?            @db.Int
+  universe  Int             @default(1) @db.Int
+  kanalen   Int             @default(1) @db.Int
+  createdAt DateTime        @default(now()) @db.DateTime(3)
+  updatedAt DateTime?       @updatedAt @db.DateTime(3)
+
+  @@index([tag])
+  @@map("lightinginventory")
+}
+
+// Sound catalog model for storing sound brand information
+model SoundCatalog {
+  id             String           @id @default(cuid()) @db.VarChar(255)
+  tag            String           @unique @db.VarChar(255)
+  brand          String           @db.VarChar(255)
+  type           String           @db.VarChar(255)
+  extraInfo      String?          @db.VarChar(255)
+  SoundInventory SoundInventory[]
+
+  @@index([tag])
+  @@map("soundcatalog")
+}
+
+// Sound model for tracking sound inventory items
+model SoundInventory {
+  id        String       @id @default(cuid()) @db.VarChar(255)
+  tag       String       @db.VarChar(255)
+  label     SoundCatalog @relation(fields: [tag], references: [tag])
+  number    Int          @default(1) @db.Int()
+  locatie   String       @db.VarChar(255)
+  status    Status       @default(WERKEND)
+  patch     String?      @db.VarChar(255)
+  stereo    Boolean      @default(false)
+  createdAt DateTime     @default(now()) @db.DateTime(3)
+  updatedAt DateTime?    @updatedAt @db.DateTime(3)
+
+  @@index([tag])
+  @@map("soundinventory") // Rename table to "SoundInventory"
+}
