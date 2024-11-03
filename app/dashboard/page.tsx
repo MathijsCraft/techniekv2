@@ -16,6 +16,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TriangleAlert } from 'lucide-react';
 import UpcomingEvents from '@/components/ui/upcoming-events';
+import Link from 'next/link';
 
 export default function Page2() {
   return (
@@ -41,10 +42,9 @@ export default function Page2() {
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
           <UpcomingEvents />
-
           <div>
-            <h2 className='text-2xl font-bold'>Problemen</h2>
-            <Alert variant='destructive'>
+            <h2 className='text-2xl font-bold'>Meldingen</h2>
+            <Alert variant='destructive' className='my-3'>
               <TriangleAlert className='h-4 w-4' />
               <AlertTitle>!! Let Op !!</AlertTitle>
               <AlertDescription>
@@ -52,9 +52,16 @@ export default function Page2() {
                 reparatieverzoek in.
               </AlertDescription>
             </Alert>
-          </div>
-          <div className='grid auto-rows-min gap-4 md:grid-cols-2'>
-            <div className='aspect-video rounded-xl bg-muted/50' />
+            <Alert variant='default' className='my-3'>
+              <TriangleAlert className='h-4 w-4' />
+              <AlertTitle>Nieuw Evenement</AlertTitle>
+              <AlertDescription>
+                Er is een nieuw evenement aangevraagd! Bekijk het formulier bij{' '}
+                <Link className='font-bold' href='/dashboard/berichten/'>
+                  Berichten
+                </Link>
+              </AlertDescription>
+            </Alert>
           </div>
         </div>
       </SidebarInset>

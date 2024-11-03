@@ -13,6 +13,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { PartyPopper, TriangleAlert } from 'lucide-react';
 
 export default function Page() {
   return (
@@ -37,10 +39,26 @@ export default function Page() {
           </div>
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-          <div className='grid auto-rows-min gap-4 md:grid-cols-3'>
-            <div className='aspect-video rounded-xl bg-muted/50' />
-            <div className='aspect-video rounded-xl bg-muted/50' />
-            <div className='aspect-video rounded-xl bg-muted/50' />
+          <h2 className="ml-4 font-bold text-2xl">Inventaris Meldingen</h2>
+          <div className='grid auto-rows-min gap-4 grid-cols-2'>
+            <div>
+            <Alert variant='default' className='my-3'>
+              <PartyPopper className='h-4 w-4' />
+              <AlertTitle>Nieuwe lamp toegevoegd!</AlertTitle>
+              <AlertDescription>
+                Er is een nieuwe lamp toegevoegd aan de database!
+              </AlertDescription>
+            </Alert>
+            </div>
+            <div>
+            <Alert variant='destructive' className='my-3'>
+              <TriangleAlert className='h-4 w-4' />
+              <AlertTitle>Nieuwe defect melding!</AlertTitle>
+              <AlertDescription>
+                Een lamp is defect gemeld!
+              </AlertDescription>
+            </Alert>
+            </div>
           </div>
           <div className='min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min' />
         </div>
