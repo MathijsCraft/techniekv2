@@ -10,7 +10,10 @@ export async function GET(request: Request) {
     return NextResponse.json(catalogs, { status: 200 });
   } catch (error) {
     console.error('Error fetching catalogs:', error);
-    return NextResponse.json({ error: 'Failed to fetch catalogs' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to fetch catalogs' },
+      { status: 500 }
+    );
   }
 }
 
@@ -31,7 +34,10 @@ export async function POST(request: Request) {
     return NextResponse.json(newCatalog, { status: 201 });
   } catch (error) {
     console.error('Error creating catalog:', error);
-    return NextResponse.json({ error: 'Failed to create catalog' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to create catalog' },
+      { status: 500 }
+    );
   }
 }
 
@@ -59,7 +65,10 @@ export async function PUT(request: Request) {
     return NextResponse.json(updatedCatalog, { status: 200 });
   } catch (error) {
     console.error('Error updating catalog:', error);
-    return NextResponse.json({ error: 'Failed to update catalog' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to update catalog' },
+      { status: 500 }
+    );
   }
 }
 
@@ -81,6 +90,9 @@ export async function DELETE(request: Request) {
     return new Response(null, { status: 204 }); // Send a 204 No Content response
   } catch (error) {
     console.error('Error deleting catalog:', error);
-    return NextResponse.json({ error: 'Failed to delete catalog' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to delete catalog' },
+      { status: 500 }
+    );
   }
 }

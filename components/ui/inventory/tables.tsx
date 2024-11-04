@@ -27,7 +27,8 @@ import { Badge } from '@/components/ui/badge';
 import LightCatalogDialog from '@/components/ui/inventory/light-catalog-add';
 import LightCatalogEdit from '@/components/ui/inventory/light-catalog-edit';
 
-import LightInventoryEditDialog from '@/components/ui/inventory/edit-lamp';
+import LightInventoryDialog from '@/components/ui/inventory/light-inventory-add';
+import LightInventoryEdit from '@/components/ui/inventory/light-inventory-edit';
 import { Status, Inventory, Catalogus } from '@/lib/types';
 
 export const LichtInventarisColumns: ColumnDef<Inventory>[] = [
@@ -38,13 +39,13 @@ export const LichtInventarisColumns: ColumnDef<Inventory>[] = [
         variant='ghost'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        ID
+        Tag
         <ArrowUpDown className='ml-2 h-4 w-4' />
       </Button>
     ),
   },
   {
-    accessorKey: 'nummer',
+    accessorKey: 'number',
     header: ({ column }) => (
       <Button
         variant='ghost'
@@ -55,10 +56,10 @@ export const LichtInventarisColumns: ColumnDef<Inventory>[] = [
       </Button>
     ),
     cell: ({ row }) => {
-      const nummer = parseFloat(row.getValue('nummer'));
+      const number = parseFloat(row.getValue('number'));
       const formatted = new Intl.NumberFormat('en', {
-        minimumIntegerDigits: 3,
-      }).format(nummer);
+        minimumIntegerDigits: 2,
+      }).format(number);
       return <div className='font-medium'>{formatted}</div>;
     },
   },
@@ -88,22 +89,49 @@ export const LichtInventarisColumns: ColumnDef<Inventory>[] = [
     cell: ({ row }) => {
       const [status, setStatus] = useState<Status>(row.original.status);
 
-      const handleStatusChange = (newStatus: Status) => {
+      const handleStatusChange = async (newStatus: Status) => {
         setStatus(newStatus);
-        // Optionally, you might want to add logic here to persist this change.
+
+        try {
+          // Call the API to update the status in the database
+          const response = await fetch(`/api/inventory/light-inventory?id=${row.original.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              status: newStatus, // Update the status only
+            }),
+          });
+
+          if (response.ok) {
+            // Call the success callback to refresh data or show success message
+            console.log('Status updated successfully');
+          } else {
+            console.error('Error updating inventory item');
+          }
+        } catch (error) {
+          console.error('Error updating status:', error);
+        }
       };
 
       const renderStatusBadge = () => {
         switch (status) {
-          case 'Werkend':
+          case 'WERKEND':
             return <Badge className='bg-green-600 hover:bg-green-700'>Werkend</Badge>;
-          case 'Ter Reparatie':
+          case 'TER_REPARATIE':
             return <Badge className='bg-purple-700 hover:bg-purple-800'>Ter Reparatie</Badge>;
-          case 'Defect':
+          case 'DEFECT':
             return <Badge className='bg-red-600 hover:bg-red-700'>Defect</Badge>;
           default:
             return <Badge className='bg-stone-500 hover:bg-stone-600'>Unknown</Badge>;
         }
+      };
+
+      const statusDisplayMap = {
+        WERKEND: 'Werkend',
+        TER_REPARATIE: 'Ter Reparatie',
+        DEFECT: 'Defect',
       };
 
       return (
@@ -112,9 +140,9 @@ export const LichtInventarisColumns: ColumnDef<Inventory>[] = [
             <Button variant='ghost'>{renderStatusBadge()}</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            {(['Werkend', 'Ter Reparatie', 'Defect'] as Status[]).map((stat) => (
+            {(['WERKEND', 'TER_REPARATIE', 'DEFECT'] as Status[]).map((stat) => (
               <DropdownMenuItem key={stat} onClick={() => handleStatusChange(stat)}>
-                {stat}
+                {statusDisplayMap[stat]}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
@@ -122,31 +150,70 @@ export const LichtInventarisColumns: ColumnDef<Inventory>[] = [
       );
     },
     sortingFn: (rowA, rowB) => {
-      const order = { Werkend: 1, 'Ter Reparatie': 2, Defect: 3 };
+      const order = { WERKEND: 1, 'TER_REPARATIE': 2, DEFECT: 3 };
       return (order[rowA.original.status] || 0) - (order[rowB.original.status] || 0);
     },
   },
   {
+    accessorKey: 'dmx',
+    header: ({ column }) => (
+      <Button
+        variant='ghost'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        DMX Adres
+        <ArrowUpDown className='ml-2 h-4 w-4' />
+      </Button>
+    ),
+    cell: ({ row }) => {
+      const dmx = parseFloat(row.getValue('dmx'));
+      const formatted = new Intl.NumberFormat('en', {
+        minimumIntegerDigits: 3,
+      }).format(dmx);
+      return <div className='text-center font-medium'>{formatted}</div>;
+    },
+  },
+  {
+    accessorKey: 'universe',
+    header: ({ column }) => (
+      <Button
+        variant='ghost'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Universe
+        <ArrowUpDown className='ml-2 h-4 w-4' />
+      </Button>
+    ),
+  },
+  {
     id: 'edit',
     header: () => (
-      <Link href={'/dashboard/inventaris/licht/catalogus'}>
-        <Button>
-          <Pencil /> Catalogus Bewerken
-        </Button>
-      </Link>
+      <div className='flex justify-end gap-4'>
+        <LightInventoryDialog onAddSuccess={() => {}} />
+        <Link href={'/dashboard/inventaris/licht/catalogus'}>
+          <Button>
+            <Pencil /> Catalogus
+          </Button>
+        </Link>
+      </div>
     ),
     cell: ({ row }) => {
       const inventory = row.original;
       return (
-        <div>
-          <LightInventoryEditDialog inventoryItem={inventory} onEditSuccess={() => {/* handle success */}} />
+        <div className='flex justify-end'>
+          <LightInventoryEdit
+            inventoryItem={inventory}
+            onEditSuccess={() => {}}
+          />
         </div>
       );
     },
   },
 ];
 
-export const LichtCatalogusColumns = (fetchCatalogData: () => Promise<void>): ColumnDef<Catalogus>[] => [
+export const LichtCatalogusColumns = (
+  fetchCatalogData: () => Promise<void>
+): ColumnDef<Catalogus>[] => [
   {
     accessorKey: 'tag',
     header: ({ column }) => (
@@ -154,7 +221,7 @@ export const LichtCatalogusColumns = (fetchCatalogData: () => Promise<void>): Co
         variant='ghost'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        ID
+        Tag
         <ArrowUpDown className='ml-2 h-4 w-4' />
       </Button>
     ),
@@ -214,97 +281,8 @@ export const LichtCatalogusColumns = (fetchCatalogData: () => Promise<void>): Co
         <LightCatalogDialog onAddSuccess={fetchCatalogData} />
       </div>
     ),
-    // cell: ({ row }) => {
-    //   const inventory = row.original;
-    //   const [id, setID] = useState(inventory.tag);
-    //   const [brand, setBrand] = useState(inventory.brand);
-    //   const [soort, setSoort] = useState(inventory.soort);
-    //   const [type, setType] = useState(inventory.type);
-    //   const [dmx, setDMX] = useState(inventory.dmx || 1);
-    //   const [isDialogOpen, setDialogOpen] = useState(false);
-    
-    //   const handleSave = async () => {
-    //     const response = await fetch(`/api/inventory/light-catalog/${id}`, {
-    //       method: 'PUT', // Use PUT for updates
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify({ brand, soort, type, dmx }),
-    //     });
-    
-    //     if (response.ok) {
-    //       // Handle success, e.g., show a message or refresh data
-    //       console.log('Item updated successfully');
-    //       setDialogOpen(false); // Close dialog after saving
-    //     } else {
-    //       console.error('Error updating item');
-    //     }
-    //   };
-    
-    //   const handleDelete = async () => {
-    //     const response = await fetch(`/api/inventory/light-catalog/${id}`, {
-    //       method: 'DELETE', // Use DELETE for removing the item
-    //     });
-    
-    //     if (response.ok) {
-    //       // Handle success, e.g., show a message or refresh data
-    //       console.log('Item deleted successfully');
-    //       // Optionally, you could call fetchCatalogData() here to refresh the data
-    //     } else {
-    //       console.error('Error deleting item');
-    //     }
-    //   };
-    
-    //   return (
-    //     <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-    //       <DialogTrigger asChild>
-    //         <Button>
-    //           <Pencil /> Bewerken
-    //         </Button>
-    //       </DialogTrigger>
-    //       <DialogContent className='w-[800px] sm:max-w-[425px] md:max-w-full'>
-    //         <DialogHeader>
-    //           <DialogTitle>
-    //             Catalogus: {brand} {type}
-    //           </DialogTitle>
-    //           <DialogDescription>
-    //             Maak aanpassingen aan de lamp in de catalogus.
-    //           </DialogDescription>
-    //         </DialogHeader>
-    //         <div className='grid gap-4 py-4'>
-    //           <div className='grid grid-cols-2 gap-8'>
-    //             <div className='grid grid-cols-4 items-center gap-4'>
-    //               <Label htmlFor='id' className='text-right'>ID</Label>
-    //               <Input id='id' value={id} className='col-span-3' readOnly />
-    //             </div>
-    //             <div className='grid grid-cols-4 items-center gap-4'>
-    //               <Label htmlFor='brand' className='text-right'>Merk</Label>
-    //               <Input id='brand' value={brand} className='col-span-3' onChange={(e) => setBrand(e.target.value)} />
-    //             </div>
-    //             <div className='grid grid-cols-4 items-center gap-4'>
-    //               <Label htmlFor='type' className='text-right'>Type</Label>
-    //               <Input id='type' value={type} className='col-span-3' onChange={(e) => setType(e.target.value)} />
-    //             </div>
-    //             <div className='grid grid-cols-4 items-center gap-4'>
-    //               <Label htmlFor='soort' className='text-right'>Soort</Label>
-    //               <Input id='soort' value={soort} className='col-span-3' onChange={(e) => setSoort(e.target.value)} />
-    //             </div>
-    //             <div className='grid grid-cols-4 items-center gap-4'>
-    //               <Label htmlFor='dmx' className='text-right'>Aantal Kanalen</Label>
-    //               <Input id='dmx' value={dmx} className='col-span-3' onChange={(e) => setDMX(parseInt(e.target.value) || 0)} />
-    //             </div>
-    //           </div>
-    //         </div>
-    //         <DialogFooter>
-    //           <Button type='button' onClick={handleSave}>Opslaan</Button>
-    //           <Button type='button' variant='destructive' onClick={handleDelete}>Verwijderen</Button>
-    //         </DialogFooter>
-    //       </DialogContent>
-    //     </Dialog>
-    //   );
-    // },
     cell: ({ row }) => {
-      const inventory = row.original;    
+      const inventory = row.original;
       return (
         <LightCatalogEdit
           inventory={inventory}
@@ -313,6 +291,5 @@ export const LichtCatalogusColumns = (fetchCatalogData: () => Promise<void>): Co
         />
       );
     },
-    
   },
 ];

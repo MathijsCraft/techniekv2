@@ -1,3 +1,5 @@
+'use client';
+
 import { AppSidebar } from '@/components/app-sidebar';
 import {
   Breadcrumb,
@@ -13,126 +15,37 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import {
-  Inventory,
-  LichtInventarisColumns,
-} from '@/components/ui/inventory/columns';
+import { LichtInventarisColumns } from '@/components/ui/inventory/tables';
 import { DataTable } from '@/components/ui/inventory/data-table';
+import { useEffect, useState } from 'react';
 
-async function getData(): Promise<Inventory[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: 'ST P75',
-      nummer: 1,
-      locatie: 'Truss Cirkel p1',
-      status: 'Defect',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 2,
-      locatie: 'Truss Cirkel p2',
-      status: 'Werkend',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 3,
-      locatie: 'Truss Cirkel p3',
-      status: 'Defect',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 4,
-      locatie: 'Truss Cirkel p4',
-      status: 'Defect',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 5,
-      locatie: 'Truss Cirkel p4',
-      status: 'Werkend',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 6,
-      locatie: 'Truss Cirkel p4',
-      status: 'Defect',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 7,
-      locatie: 'Truss Cirkel p4',
-      status: 'Ter Reparatie',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 8,
-      locatie: 'Truss Cirkel p4',
-      status: 'Defect',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 9,
-      locatie: 'Truss Cirkel p4',
-      status: 'Defect',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 10,
-      locatie: 'Truss Cirkel p4',
-      status: 'Defect',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 11,
-      locatie: 'Truss Cirkel p4',
-      status: 'Defect',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 12,
-      locatie: 'Truss Cirkel p4',
-      status: 'Defect',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 13,
-      locatie: 'Truss Cirkel p4',
-      status: 'Defect',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 14,
-      locatie: 'Truss Cirkel p4',
-      status: 'Defect',
-      dmx: 1,
-    },
-    {
-      id: 'ST P75',
-      nummer: 15,
-      locatie: 'Truss Cirkel p4',
-      status: 'Defect',
-      dmx: 1,
-    },
-    // ...
-  ];
-}
+import { Inventory } from '@/lib/types';
 
-export default async function Page() {
-  const data = await getData();
+export default function Page() {
+  const [data, setData] = useState<Inventory[]>([]); // State to hold inventory data
+  const [loading, setLoading] = useState(true); // State to manage loading status
+  const [error, setError] = useState<string | null>(null); // State for error handling
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/inventory/light-inventory'); // Fetch inventory data from your API
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const inventoryData: Inventory[] = await response.json(); // Parse the JSON response
+        setData(inventoryData); // Update the state with the fetched data
+      } catch (err) {
+        setError('Failed to load inventory data'); // Set the error state
+        console.error(err);
+      } finally {
+        setLoading(false); // Update loading state
+      }
+    };
+
+    fetchData(); // Call the fetch function
+  }, []); // Empty dependency array to run once on mount
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -161,7 +74,13 @@ export default async function Page() {
           </div>
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-          <DataTable columns={LichtInventarisColumns} data={data} />
+          {loading ? (
+            <p>Loading...</p> // Display loading text while fetching data
+          ) : error ? (
+            <p className='text-red-500'>{error}</p> // Display error message if any
+          ) : (
+            <DataTable columns={LichtInventarisColumns} data={data} />
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>

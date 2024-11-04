@@ -16,9 +16,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import {
-  LichtCatalogusColumns,
-} from '@/components/ui/inventory/tables';
+import { LichtCatalogusColumns } from '@/components/ui/inventory/tables';
 
 import { Catalogus } from '@/lib/types';
 import { DataTable } from '@/components/ui/inventory/data-table';
@@ -80,7 +78,10 @@ export default function Page() {
           </div>
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-          <DataTable columns={LichtCatalogusColumns(fetchCatalogData)} data={data} />
+          <DataTable
+            columns={LichtCatalogusColumns(fetchCatalogData)}
+            data={data}
+          />
         </div>
       </SidebarInset>
     </SidebarProvider>

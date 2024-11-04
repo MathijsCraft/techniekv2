@@ -13,10 +13,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 interface LightCatalogDialogProps {
-  onAddSuccess?: () => void;  // Optional callback prop for success handling
+  onAddSuccess?: () => void; // Optional callback prop for success handling
 }
 
-const LightCatalogDialog: React.FC<LightCatalogDialogProps> = ({ onAddSuccess }) => {
+const LightCatalogDialog: React.FC<LightCatalogDialogProps> = ({
+  onAddSuccess,
+}) => {
   const [open, setOpen] = useState(false);
   const [tag, setTag] = useState('');
   const [brand, setBrand] = useState('');
@@ -37,9 +39,13 @@ const LightCatalogDialog: React.FC<LightCatalogDialogProps> = ({ onAddSuccess })
       });
 
       if (response.ok) {
-        setOpen(false);    // Close dialog
-        setTag(''); setBrand(''); setType(''); setSoort(''); setDmx(1);  // Reset fields
-        onAddSuccess?.();   // Call the parent callback to refresh data
+        setOpen(false); // Close dialog
+        setTag('');
+        setBrand('');
+        setType('');
+        setSoort('');
+        setDmx(1); // Reset fields
+        onAddSuccess?.(); // Call the parent callback to refresh data
       } else {
         setError('Error adding new catalog item');
       }
@@ -52,7 +58,9 @@ const LightCatalogDialog: React.FC<LightCatalogDialogProps> = ({ onAddSuccess })
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button><Plus /> Voeg nieuwe lamp toe</Button>
+        <Button>
+          <Plus /> Voeg nieuwe lamp toe
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -62,23 +70,44 @@ const LightCatalogDialog: React.FC<LightCatalogDialogProps> = ({ onAddSuccess })
           <div className='grid grid-cols-2 gap-8'>
             <div>
               <Label htmlFor='tag'>ID</Label>
-              <Input id='tag' value={tag} onChange={(e) => setTag(e.target.value)} />
+              <Input
+                id='tag'
+                value={tag}
+                onChange={(e) => setTag(e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor='brand'>Merk</Label>
-              <Input id='brand' value={brand} onChange={(e) => setBrand(e.target.value)} />
+              <Input
+                id='brand'
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor='type'>Type</Label>
-              <Input id='type' value={type} onChange={(e) => setType(e.target.value)} />
+              <Input
+                id='type'
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor='soort'>Soort</Label>
-              <Input id='soort' value={soort} onChange={(e) => setSoort(e.target.value)} />
+              <Input
+                id='soort'
+                value={soort}
+                onChange={(e) => setSoort(e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor='dmx'>Aantal Kanalen</Label>
-              <Input id='dmx' type='number' value={dmx} onChange={(e) => setDmx(Number(e.target.value))} />
+              <Input
+                id='dmx'
+                type='number'
+                value={dmx}
+                onChange={(e) => setDmx(Number(e.target.value))}
+              />
             </div>
           </div>
           {error && <p className='text-red-500'>{error}</p>}
