@@ -57,7 +57,7 @@ const LightingInventoryDialog: React.FC<LightingInventoryDialogProps> = ({
         setUniverse(1); // Reset fields
         onAddSuccess?.(); // Call the parent callback to refresh data
       } else {
-        setError('Error adding new inventory item');
+        setError('Er was een error. Kijk even of de gebruikte tag wel in de catalogus staat.');
       }
     } catch (err) {
       setError('An unexpected error occurred.');
@@ -113,9 +113,9 @@ const LightingInventoryDialog: React.FC<LightingInventoryDialogProps> = ({
                   <SelectValue placeholder='Select Status' />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value='Werkend'>Werkend</SelectItem>
-                  <SelectItem value='Ter Reparatie'>Ter Reparatie</SelectItem>
-                  <SelectItem value='Defect'>Defect</SelectItem>
+                  <SelectItem value='WERKEND'>Werkend</SelectItem>
+                  <SelectItem value='TER_REPARATIE'>Ter Reparatie</SelectItem>
+                  <SelectItem value='DEFECT'>Defect</SelectItem>
                 </SelectContent>
               </Select>
             </div>

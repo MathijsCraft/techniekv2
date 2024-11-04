@@ -16,6 +16,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,12 +37,14 @@ import { Edit } from 'lucide-react';
 
 type LightInventoryEditDialogProps = {
   inventoryItem: Inventory; // Assume Inventory type is defined as per your data
-  onEditSuccess: () => void;
+  onUpdateSuccess: () => void; // Callback on successful update
+  onDeleteSuccess: () => void; // Callback on successful delete
 };
 
 const LightInventoryEditDialog: React.FC<LightInventoryEditDialogProps> = ({
   inventoryItem,
-  onEditSuccess,
+  onUpdateSuccess,
+  onDeleteSuccess
 }) => {
   const [tag, setTag] = useState('');
   const [number, setNumber] = useState(1);
@@ -41,6 +54,7 @@ const LightInventoryEditDialog: React.FC<LightInventoryEditDialogProps> = ({
   const [universe, setUniverse] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (inventoryItem) {
@@ -79,14 +93,34 @@ const LightInventoryEditDialog: React.FC<LightInventoryEditDialogProps> = ({
         setDmx(1);
         setUniverse(1);
         
-        onEditSuccess();
+        onUpdateSuccess();
         setOpen(false);
       } else {
-        setError('Error updating inventory item');
+        setError('Er was een error, probeer het later opnieuw.');
       }
     } catch (err) {
       setError('An unexpected error occurred.');
       console.error(err);
+    }
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true); // Indicate that deletion is in progress
+    try {
+      const response = await fetch(`/api/inventory/light-inventory?id=${inventoryItem.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        onDeleteSuccess(); // Call the success callback to refresh data or show success message
+        setOpen(false); // Close the form after deletion
+      } else {
+        console.error('Er was een error, probeer het later opnieuw.');
+      }
+    } catch (err) {
+      console.error('An unexpected error occurred while deleting:', err);
+    } finally {
+      setIsDeleting(false); // Reset the deleting state
     }
   };
 
@@ -158,6 +192,28 @@ const LightInventoryEditDialog: React.FC<LightInventoryEditDialogProps> = ({
         </div>
         <DialogFooter>
           <Button onClick={handleSubmit}>Opslaan</Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant='destructive'>Verwijderen</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Weet je zeker dat je wilt verwijderen?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Deze actie kan niet ongedaan gemaakt worden. Dit zal de lamp
+                  permanent verwijderen.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Annuleren</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete}>
+                  Doorgaan
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </DialogFooter>
       </DialogContent>
     </Dialog>

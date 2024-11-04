@@ -47,7 +47,7 @@ const LightCatalogDialog: React.FC<LightCatalogDialogProps> = ({
         setDmx(1); // Reset fields
         onAddSuccess?.(); // Call the parent callback to refresh data
       } else {
-        setError('Error adding new catalog item');
+        setError('Er was een error, probeer het later opnieuw.');
       }
     } catch (err) {
       setError('An unexpected error occurred.');
@@ -59,7 +59,7 @@ const LightCatalogDialog: React.FC<LightCatalogDialogProps> = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
-          <Plus /> Voeg nieuwe lamp toe
+          <Plus /> Nieuw
         </Button>
       </DialogTrigger>
       <DialogContent>

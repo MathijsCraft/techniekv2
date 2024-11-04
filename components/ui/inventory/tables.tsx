@@ -31,7 +31,9 @@ import LightInventoryDialog from '@/components/ui/inventory/light-inventory-add'
 import LightInventoryEdit from '@/components/ui/inventory/light-inventory-edit';
 import { Status, Inventory, Catalogus } from '@/lib/types';
 
-export const LichtInventarisColumns: ColumnDef<Inventory>[] = [
+export const LichtInventarisColumns = (
+  fetchInventarisData: () => Promise<void>
+): ColumnDef<Inventory>[] => [
   {
     accessorKey: 'tag',
     header: ({ column }) => (
@@ -88,6 +90,8 @@ export const LichtInventarisColumns: ColumnDef<Inventory>[] = [
     ),
     cell: ({ row }) => {
       const [status, setStatus] = useState<Status>(row.original.status);
+
+      
 
       const handleStatusChange = async (newStatus: Status) => {
         setStatus(newStatus);
@@ -189,7 +193,7 @@ export const LichtInventarisColumns: ColumnDef<Inventory>[] = [
     id: 'edit',
     header: () => (
       <div className='flex justify-end gap-4'>
-        <LightInventoryDialog onAddSuccess={() => {}} />
+        <LightInventoryDialog onAddSuccess={fetchInventarisData} />
         <Link href={'/dashboard/inventaris/licht/catalogus'}>
           <Button>
             <Pencil /> Catalogus
@@ -203,7 +207,8 @@ export const LichtInventarisColumns: ColumnDef<Inventory>[] = [
         <div className='flex justify-end'>
           <LightInventoryEdit
             inventoryItem={inventory}
-            onEditSuccess={() => {}}
+            onUpdateSuccess={fetchInventarisData}
+            onDeleteSuccess={fetchInventarisData}
           />
         </div>
       );

@@ -65,7 +65,7 @@ const LightCatalogEditDialog: React.FC<LightCatalogEditDialogProps> = ({
         onUpdateSuccess(); // Call the parent callback to refresh data
         setIsOpen(false); // Close the dialog after saving
       } else {
-        console.error('Error updating item');
+        console.error('Er was een error, probeer het later opnieuw.');
       }
     } catch (err) {
       console.error('An unexpected error occurred:', err);
@@ -87,7 +87,7 @@ const LightCatalogEditDialog: React.FC<LightCatalogEditDialogProps> = ({
         onDeleteSuccess(); // Call the parent callback to refresh data
         setIsOpen(false); // Close the dialog after deleting
       } else {
-        console.error('Error deleting item');
+        console.error('Er was een error, probeer het later opnieuw.');
       }
     } catch (err) {
       console.error('An unexpected error occurred:', err);

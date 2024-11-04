@@ -18,6 +18,7 @@ import {
 import { LichtInventarisColumns } from '@/components/ui/inventory/tables';
 import { DataTable } from '@/components/ui/inventory/data-table';
 import { useEffect, useState } from 'react';
+import { Suspense } from 'react';
 
 import { Inventory } from '@/lib/types';
 
@@ -26,25 +27,25 @@ export default function Page() {
   const [loading, setLoading] = useState(true); // State to manage loading status
   const [error, setError] = useState<string | null>(null); // State for error handling
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/inventory/light-inventory'); // Fetch inventory data from your API
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const inventoryData: Inventory[] = await response.json(); // Parse the JSON response
-        setData(inventoryData); // Update the state with the fetched data
-      } catch (err) {
-        setError('Failed to load inventory data'); // Set the error state
-        console.error(err);
-      } finally {
-        setLoading(false); // Update loading state
+  // Function to fetch data from the server
+  const fetchInventarisData = async () => {
+    try {
+      const response = await fetch('/api/inventory/light-inventory'); // Adjust API route if needed
+      if (response.ok) {
+        const catalogData = await response.json();
+        setData(catalogData);
+      } else {
+        console.error('Failed to fetch catalog data');
       }
-    };
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-    fetchData(); // Call the fetch function
-  }, []); // Empty dependency array to run once on mount
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchInventarisData();
+  }, []);
 
   return (
     <SidebarProvider>
@@ -74,13 +75,9 @@ export default function Page() {
           </div>
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-          {loading ? (
-            <p>Loading...</p> // Display loading text while fetching data
-          ) : error ? (
-            <p className='text-red-500'>{error}</p> // Display error message if any
-          ) : (
-            <DataTable columns={LichtInventarisColumns} data={data} />
-          )}
+          <Suspense>
+          <DataTable columns={LichtInventarisColumns(fetchInventarisData)} data={data} />
+          </Suspense>
         </div>
       </SidebarInset>
     </SidebarProvider>
