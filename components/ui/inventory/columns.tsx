@@ -1,10 +1,11 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, Pencil } from 'lucide-react';
+import { ArrowUpDown, Pencil, Plus } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +27,8 @@ import { Label } from '@/components/ui/label';
 
 import { Badge } from '@/components/ui/badge';
 
+import LightCatalogDialog from '@/components/ui/inventory/add-lamp'
+
 type Status = 'Werkend' | 'Ter Reparatie' | 'Defect';
 
 export type Inventory = {
@@ -36,9 +39,17 @@ export type Inventory = {
   dmx: number;
 };
 
-export const columns: ColumnDef<Inventory>[] = [
+export type Catalogus = {
+  tag: string;
+  brand: string;
+  type: string;
+  soort: string;
+  dmx: number;
+};
+
+export const LichtInventarisColumns: ColumnDef<Inventory>[] = [
   {
-    accessorKey: 'id',
+    accessorKey: 'tag',
     header: ({ column }) => (
       <Button
         variant='ghost'
@@ -149,6 +160,13 @@ export const columns: ColumnDef<Inventory>[] = [
   },
   {
     id: 'edit',
+    header: ({ column }): React.ReactNode => (
+      <Link href={'/dashboard/inventaris/licht/catalogus'}>
+        <Button>
+          <Pencil /> Catalogus Bewerken
+        </Button>
+      </Link>
+    ),
     cell: ({ row }) => {
       const inventory = row.original;
       const [status, setStatus] = useState(inventory.status);
@@ -247,6 +265,162 @@ export const columns: ColumnDef<Inventory>[] = [
                     id='channels'
                     type='number'
                     placeholder='1'
+                    className='col-span-3'
+                  />
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type='submit'>Opslaan</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      );
+    },
+  },
+];
+
+export const LichtCatalogusColumns: ColumnDef<Catalogus>[] = [
+  {
+    accessorKey: 'tag',
+    header: ({ column }) => (
+      <Button
+        variant='ghost'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        ID
+        <ArrowUpDown className='ml-2 h-4 w-4' />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'brand',
+    header: ({ column }) => (
+      <Button
+        variant='ghost'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Merk
+        <ArrowUpDown className='ml-2 h-4 w-4' />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'type',
+    header: ({ column }) => (
+      <Button
+        variant='ghost'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Type
+        <ArrowUpDown className='ml-2 h-4 w-4' />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'soort',
+    header: ({ column }) => (
+      <Button
+        variant='ghost'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Soort
+        <ArrowUpDown className='ml-2 h-4 w-4' />
+      </Button>
+    ),
+  },
+  {
+    accessorKey: 'dmx',
+    header: ({ column }) => (
+      <Button
+        variant='ghost'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Aantal Kanalen
+        <ArrowUpDown className='ml-2 h-4 w-4' />
+      </Button>
+    ),
+  },
+  {
+    id: 'edit',
+    header:  () => {
+      return (
+        <div>
+          <LightCatalogDialog />
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const inventory = row.original;
+      const [id, setID] = useState(inventory.tag);
+      const [brand, setBrand] = useState(inventory.brand);
+      const [type, setType] = useState(inventory.type);
+      const [DMX, setDMX] = useState(inventory.dmx || 1);
+
+      return (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>
+              <Pencil /> Bewerken
+            </Button>
+          </DialogTrigger>
+          <DialogContent className='w-[800px] sm:max-w-[425px] md:max-w-full'>
+            <DialogHeader>
+              <DialogTitle>
+                Catalogus: {brand} {type}
+              </DialogTitle>
+              <DialogDescription>
+                Maak aanpassingen aan het type in de catalogus.
+              </DialogDescription>
+            </DialogHeader>
+            <div className='grid gap-4 py-4'>
+              <div className='grid grid-cols-2 gap-8'>
+                <div className='grid grid-cols-4 items-center gap-4'>
+                  <Label htmlFor='id' className='text-right'>
+                    ID
+                  </Label>
+                  <Input id='id' value={id} className='col-span-3' />
+                </div>
+                <div className='grid grid-cols-4 items-center gap-4'>
+                  <Label htmlFor='brand' className='text-right'>
+                    Merk
+                  </Label>
+                  <Input
+                    id='brand'
+                    value={inventory.brand}
+                    className='col-span-3'
+                  />
+                </div>
+
+                <div className='grid grid-cols-4 items-center gap-4'>
+                  <Label htmlFor='type' className='text-right'>
+                    Type
+                  </Label>
+                  <Input
+                    id='type'
+                    placeholder={inventory.type}
+                    className='col-span-3'
+                  />
+                </div>
+
+                <div className='grid grid-cols-4 items-center gap-4'>
+                  <Label htmlFor='soort' className='text-right'>
+                    Soort
+                  </Label>
+                  <Input
+                    id='soort'
+                    placeholder={inventory.soort}
+                    className='col-span-3'
+                  />
+                </div>
+
+                <div className='grid grid-cols-4 items-center gap-4'>
+                  <Label htmlFor='dmx' className='text-right'>
+                    Aantal Kanalen
+                  </Label>
+                  <Input
+                    id='dmx'
+                    value={inventory.dmx}
                     className='col-span-3'
                   />
                 </div>

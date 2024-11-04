@@ -1,3 +1,4 @@
+import { nextui } from '@nextui-org/theme';
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -6,6 +7,7 @@ const config: Config = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@nextui-org/theme/dist/components/[object Object].js',
   ],
   theme: {
     extend: {
@@ -68,6 +70,9 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'), // Correctly require the tailwindcss-animate plugin
+    nextui(), // nextui plugin as a function
+  ],
 };
 export default config;

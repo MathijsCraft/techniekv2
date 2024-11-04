@@ -47,7 +47,7 @@ const data = {
     },
     {
       title: 'Inventaris',
-      url: '/dashboard/inventaris/',
+      url: '/dashboard/inventaris/licht',
       icon: Package,
       items: [
         {

@@ -13,7 +13,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { Inventory, columns } from '@/components/ui/inventory/columns';
+import {
+  Inventory,
+  LichtInventarisColumns,
+} from '@/components/ui/inventory/columns';
 import { DataTable } from '@/components/ui/inventory/data-table';
 
 async function getData(): Promise<Inventory[]> {
@@ -158,7 +161,7 @@ export default async function Page() {
           </div>
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-          <DataTable columns={columns} data={data} />
+          <DataTable columns={LichtInventarisColumns} data={data} />
         </div>
       </SidebarInset>
     </SidebarProvider>

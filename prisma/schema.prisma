@@ -45,7 +45,8 @@ model LightingCatalog {
   tag               String              @unique @db.VarChar(255)
   brand             String              @db.VarChar(255)
   type              String              @db.VarChar(255)
-  extraInfo         String?             @db.VarChar(255)
+  soort              String              @db.VarChar(255)
+  dmx         Int             @db.Int
   LightingInventory LightingInventory[]
 
   @@index([tag])
@@ -62,7 +63,6 @@ model LightingInventory {
   status    Status          @default(WERKEND)
   dmx       Int?            @db.Int
   universe  Int             @default(1) @db.Int
-  kanalen   Int             @default(1) @db.Int
   createdAt DateTime        @default(now()) @db.DateTime(3)
   updatedAt DateTime?       @updatedAt @db.DateTime(3)
 
