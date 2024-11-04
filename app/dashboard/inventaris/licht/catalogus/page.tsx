@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import { AppSidebar } from '@/components/app-sidebar';
 import {
   Breadcrumb,
@@ -14,54 +17,35 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import {
-  Catalogus,
   LichtCatalogusColumns,
-} from '@/components/ui/inventory/columns';
+} from '@/components/ui/inventory/tables';
+
+import { Catalogus } from '@/lib/types';
 import { DataTable } from '@/components/ui/inventory/data-table';
-import { prisma } from '@/lib/prisma';
 
-// async function getData(): Promise<Catalogus[]> {
-//   // Fetch data from your API here.
-//   return [
-//     {
-//       id: 'ST P75',
-//       brand: 'ShowTec',
-//       type: 'Phantom 75',
-//       fixture: 'Moving Head',
-//       dmx: 15,
-//     },
-//     {
-//       id: 'ST P250',
-//       brand: 'ShowTec',
-//       type: 'Phantom 250',
-//       fixture: 'Moving Head',
-//       dmx: 15,
-//     },
-//     {
-//       id: 'PL JS2',
-//       brand: 'Tribe ProLights',
-//       type: 'JetSpot 2',
-//       fixture: 'Moving Head',
-//       dmx: 15,
-//     },
-//   ];
-// }
+export default function Page() {
+  const [data, setData] = useState<Catalogus[]>([]);
 
-async function getData(): Promise<Catalogus[]> {
-    const data = await prisma.lightingCatalog.findMany({
-      select: {
-        tag: true,
-        brand: true,
-        type: true,
-        soort: true,
-        dmx: true,
-      },
-    });
-    return data; // Return the fetched data
-  }
+  // Function to fetch data from the server
+  const fetchCatalogData = async () => {
+    try {
+      const response = await fetch('/api/inventory/light-catalog'); // Adjust API route if needed
+      if (response.ok) {
+        const catalogData = await response.json();
+        setData(catalogData);
+      } else {
+        console.error('Failed to fetch catalog data');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-export default async function Page() {
-  const data = await getData();
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchCatalogData();
+  }, []);
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -96,7 +80,7 @@ export default async function Page() {
           </div>
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-          <DataTable columns={LichtCatalogusColumns} data={data} />
+          <DataTable columns={LichtCatalogusColumns(fetchCatalogData)} data={data} />
         </div>
       </SidebarInset>
     </SidebarProvider>
