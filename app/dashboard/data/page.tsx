@@ -79,7 +79,9 @@ export default async function Page() {
                 lichtItems.map((item, index) => (
                   <Card className='p-4' key={index}>
                     <Link href={`/dashboard/data/licht/${item}`}>
-                      <h3 className='text-lg font-medium flex flex-row gap-2'><Lightbulb /> {formatFolderName(item)}</h3>
+                      <h3 className='flex flex-row gap-2 text-lg font-medium'>
+                        <Lightbulb /> {formatFolderName(item)}
+                      </h3>
                     </Link>
                   </Card>
                 ))
@@ -95,7 +97,9 @@ export default async function Page() {
                 geluidItems.map((item, index) => (
                   <Card className='p-4' key={index}>
                     <Link href={`/dashboard/data/geluid/${item}`}>
-                      <h3 className='text-lg font-medium flex flex-row gap-2'><AudioLines /> {formatFolderName(item)}</h3>
+                      <h3 className='flex flex-row gap-2 text-lg font-medium'>
+                        <AudioLines /> {formatFolderName(item)}
+                      </h3>
                     </Link>
                   </Card>
                 ))

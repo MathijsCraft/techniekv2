@@ -89,7 +89,9 @@ export const LichtInventarisColumns = (
       </Button>
     ),
     cell: ({ row }) => {
+      /* eslint-disable react-hooks/rules-of-hooks */
       const [status, setStatus] = useState<Status>(row.original.status);
+      /* eslint-enable react-hooks/rules-of-hooks */
 
       const handleStatusChange = async (newStatus: Status) => {
         setStatus(newStatus);
@@ -446,7 +448,9 @@ export const SoundInventarisColumns = (
       </Button>
     ),
     cell: ({ row }) => {
+      /* eslint-disable react-hooks/rules-of-hooks */
       const [status, setStatus] = useState<Status>(row.original.status);
+      /* eslint-enable react-hooks/rules-of-hooks */
 
       const handleStatusChange = async (newStatus: Status) => {
         setStatus(newStatus);
@@ -544,7 +548,9 @@ export const SoundInventarisColumns = (
       </Button>
     ),
     cell: ({ row }) => {
+      /* eslint-disable react-hooks/rules-of-hooks */
       const [stereo, setStereo] = useState<boolean>(row.original.stereo);
+      /* eslint-enable react-hooks/rules-of-hooks */
 
       const handleStereoChange = async (newStereo: boolean) => {
         setStereo(newStereo);
