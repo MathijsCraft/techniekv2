@@ -57,7 +57,9 @@ const SoundInventoryDialog: React.FC<SoundInventoryDialogProps> = ({
         setStereo(false); // Reset fields
         onAddSuccess?.(); // Call the parent callback to refresh data
       } else {
-        setError('Er was een error. Kijk even of de gebruikte tag wel in de catalogus staat.');
+        setError(
+          'Er was een error. Kijk even of de gebruikte tag wel in de catalogus staat.'
+        );
       }
     } catch (err) {
       setError('An unexpected error occurred.');
@@ -128,19 +130,19 @@ const SoundInventoryDialog: React.FC<SoundInventoryDialogProps> = ({
               />
             </div>
             <div>
-            <Label htmlFor='stereo'>Stereo</Label>
-      <Select
-        value={stereo ? 'STEREO' : 'MONO'} // Convert boolean to string for the Select component
-        onValueChange={(value) => setStereo(value === 'STEREO')} // Convert string back to boolean
-      >
-        <SelectTrigger className='w-full rounded-md border'>
-          <SelectValue placeholder='Select Stereo/Mono' />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value='STEREO'>Stereo</SelectItem>
-          <SelectItem value='MONO'>Mono</SelectItem>
-        </SelectContent>
-      </Select>
+              <Label htmlFor='stereo'>Stereo</Label>
+              <Select
+                value={stereo ? 'STEREO' : 'MONO'} // Convert boolean to string for the Select component
+                onValueChange={(value) => setStereo(value === 'STEREO')} // Convert string back to boolean
+              >
+                <SelectTrigger className='w-full rounded-md border'>
+                  <SelectValue placeholder='Select Stereo/Mono' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='STEREO'>Stereo</SelectItem>
+                  <SelectItem value='MONO'>Mono</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           {error && <p className='text-red-500'>{error}</p>}

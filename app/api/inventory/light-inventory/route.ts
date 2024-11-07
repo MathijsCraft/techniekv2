@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
 // Fetch all lighting inventory items
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const inventoryItems = await prisma.lightingInventory.findMany({
       include: {

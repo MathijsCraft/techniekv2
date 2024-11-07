@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
 // Fetch all sound catalogs
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const catalogs = await prisma.soundCatalog.findMany(); // Fetch sound catalogs
     return NextResponse.json(catalogs, { status: 200 });

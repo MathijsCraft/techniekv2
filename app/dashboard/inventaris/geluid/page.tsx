@@ -25,7 +25,6 @@ import { SoundInventory } from '@/lib/types'; // Ensure you have the correct typ
 export default function Page() {
   const [data, setData] = useState<SoundInventory[]>([]); // State to hold sound inventory data
   const [loading, setLoading] = useState(true); // State to manage loading status
-  const [error, setError] = useState<string | null>(null); // State for error handling
 
   // Function to fetch sound inventory data from the server
   const fetchSoundData = async () => {
@@ -77,8 +76,11 @@ export default function Page() {
           </div>
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-          <Suspense fallback={<div>Loading...</div>}>
-            <DataTable columns={SoundInventarisColumns(fetchSoundData)} data={data} />
+          <Suspense fallback={loading && <div>Loading...</div>}>
+            <DataTable
+              columns={SoundInventarisColumns(fetchSoundData)}
+              data={data}
+            />
           </Suspense>
         </div>
       </SidebarInset>

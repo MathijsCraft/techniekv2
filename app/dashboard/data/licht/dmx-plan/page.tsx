@@ -1,5 +1,5 @@
 // app/dashboard/data/licht/page.tsx (or wherever your Page component is located)
-'use client'
+'use client';
 import { AppSidebar } from '@/components/app-sidebar';
 import {
   Breadcrumb,
@@ -50,7 +50,7 @@ export default function Page() {
           </div>
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-        <DMXVisualization />
+          <DMXVisualization />
         </div>
       </SidebarInset>
     </SidebarProvider>

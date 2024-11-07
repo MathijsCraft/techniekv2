@@ -11,17 +11,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 
 import LightCatalogDialog from '@/components/ui/inventory/light-catalog-add';
@@ -34,7 +23,13 @@ import SoundInventoryEdit from '@/components/ui/inventory/sound-inventory-edit';
 import SoundCatalogDialog from '@/components/ui/inventory/sound-catalog-add';
 import SoundCatalogEdit from '@/components/ui/inventory/sound-catalog-edit';
 
-import { Status, Inventory, Catalogus, SoundCatalogus, SoundInventory } from '@/lib/types';
+import {
+  Status,
+  Inventory,
+  Catalogus,
+  SoundCatalogus,
+  SoundInventory,
+} from '@/lib/types';
 
 export const LichtInventarisColumns = (
   fetchInventarisData: () => Promise<void>
@@ -96,26 +91,27 @@ export const LichtInventarisColumns = (
     cell: ({ row }) => {
       const [status, setStatus] = useState<Status>(row.original.status);
 
-      
-
       const handleStatusChange = async (newStatus: Status) => {
         setStatus(newStatus);
 
         try {
           // Call the API to update the status in the database
-          const response = await fetch(`/api/inventory/light-inventory?id=${row.original.id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              status: newStatus, // Update the status only
-            }),
-          });
+          const response = await fetch(
+            `/api/inventory/light-inventory?id=${row.original.id}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                status: newStatus, // Update the status only
+              }),
+            }
+          );
 
           if (response.ok) {
             // Call the success callback to refresh data or show success message
-            console.log('Status updated successfully');
+            // console.log('Status updated successfully');
           } else {
             console.error('Error updating inventory item');
           }
@@ -127,13 +123,23 @@ export const LichtInventarisColumns = (
       const renderStatusBadge = () => {
         switch (status) {
           case 'WERKEND':
-            return <Badge className='bg-green-600 hover:bg-green-700'>Werkend</Badge>;
+            return (
+              <Badge className='bg-green-600 hover:bg-green-700'>Werkend</Badge>
+            );
           case 'TER_REPARATIE':
-            return <Badge className='bg-purple-700 hover:bg-purple-800'>Ter Reparatie</Badge>;
+            return (
+              <Badge className='bg-purple-700 hover:bg-purple-800'>
+                Ter Reparatie
+              </Badge>
+            );
           case 'DEFECT':
-            return <Badge className='bg-red-600 hover:bg-red-700'>Defect</Badge>;
+            return (
+              <Badge className='bg-red-600 hover:bg-red-700'>Defect</Badge>
+            );
           default:
-            return <Badge className='bg-stone-500 hover:bg-stone-600'>Unknown</Badge>;
+            return (
+              <Badge className='bg-stone-500 hover:bg-stone-600'>Unknown</Badge>
+            );
         }
       };
 
@@ -149,18 +155,25 @@ export const LichtInventarisColumns = (
             <Button variant='ghost'>{renderStatusBadge()}</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            {(['WERKEND', 'TER_REPARATIE', 'DEFECT'] as Status[]).map((stat) => (
-              <DropdownMenuItem key={stat} onClick={() => handleStatusChange(stat)}>
-                {statusDisplayMap[stat]}
-              </DropdownMenuItem>
-            ))}
+            {(['WERKEND', 'TER_REPARATIE', 'DEFECT'] as Status[]).map(
+              (stat) => (
+                <DropdownMenuItem
+                  key={stat}
+                  onClick={() => handleStatusChange(stat)}
+                >
+                  {statusDisplayMap[stat]}
+                </DropdownMenuItem>
+              )
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
     sortingFn: (rowA, rowB) => {
-      const order = { WERKEND: 1, 'TER_REPARATIE': 2, DEFECT: 3 };
-      return (order[rowA.original.status] || 0) - (order[rowB.original.status] || 0);
+      const order = { WERKEND: 1, TER_REPARATIE: 2, DEFECT: 3 };
+      return (
+        (order[rowA.original.status] || 0) - (order[rowB.original.status] || 0)
+      );
     },
   },
   {
@@ -434,24 +447,27 @@ export const SoundInventarisColumns = (
     ),
     cell: ({ row }) => {
       const [status, setStatus] = useState<Status>(row.original.status);
-    
+
       const handleStatusChange = async (newStatus: Status) => {
         setStatus(newStatus);
-    
+
         try {
           // Call the API to update the status in the database
-          const response = await fetch(`/api/inventory/sound-inventory?id=${row.original.id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              status: newStatus, // Update the status only
-            }),
-          });
-    
+          const response = await fetch(
+            `/api/inventory/sound-inventory?id=${row.original.id}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                status: newStatus, // Update the status only
+              }),
+            }
+          );
+
           if (response.ok) {
-            console.log('Status updated successfully');
+            // console.log('Status updated successfully');
           } else {
             console.error('Error updating inventory item');
           }
@@ -459,44 +475,61 @@ export const SoundInventarisColumns = (
           console.error('Error updating status:', error);
         }
       };
-        
+
       const renderStatusBadge = () => {
         switch (status) {
           case 'WERKEND':
-            return <Badge className='bg-green-600 hover:bg-green-700'>Werkend</Badge>;
+            return (
+              <Badge className='bg-green-600 hover:bg-green-700'>Werkend</Badge>
+            );
           case 'TER_REPARATIE':
-            return <Badge className='bg-purple-700 hover:bg-purple-800'>Ter Reparatie</Badge>;
+            return (
+              <Badge className='bg-purple-700 hover:bg-purple-800'>
+                Ter Reparatie
+              </Badge>
+            );
           case 'DEFECT':
-            return <Badge className='bg-red-600 hover:bg-red-700'>Defect</Badge>;
+            return (
+              <Badge className='bg-red-600 hover:bg-red-700'>Defect</Badge>
+            );
           default:
-            return <Badge className='bg-stone-500 hover:bg-stone-600'>Unknown</Badge>;
+            return (
+              <Badge className='bg-stone-500 hover:bg-stone-600'>Unknown</Badge>
+            );
         }
       };
-    
+
       const statusDisplayMap = {
         WERKEND: 'Werkend',
         TER_REPARATIE: 'Ter Reparatie',
         DEFECT: 'Defect',
       };
-    
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant='ghost'>{renderStatusBadge()}</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            {(['WERKEND', 'TER_REPARATIE', 'DEFECT'] as Status[]).map((stat) => (
-              <DropdownMenuItem key={stat} onClick={() => handleStatusChange(stat)}>
-                {statusDisplayMap[stat]}
-              </DropdownMenuItem>
-            ))}
+            {(['WERKEND', 'TER_REPARATIE', 'DEFECT'] as Status[]).map(
+              (stat) => (
+                <DropdownMenuItem
+                  key={stat}
+                  onClick={() => handleStatusChange(stat)}
+                >
+                  {statusDisplayMap[stat]}
+                </DropdownMenuItem>
+              )
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
     sortingFn: (rowA, rowB) => {
-      const order = { WERKEND: 1, 'TER_REPARATIE': 2, DEFECT: 3 };
-      return (order[rowA.original.status] || 0) - (order[rowB.original.status] || 0);
+      const order = { WERKEND: 1, TER_REPARATIE: 2, DEFECT: 3 };
+      return (
+        (order[rowA.original.status] || 0) - (order[rowB.original.status] || 0)
+      );
     },
   },
   {
@@ -512,24 +545,27 @@ export const SoundInventarisColumns = (
     ),
     cell: ({ row }) => {
       const [stereo, setStereo] = useState<boolean>(row.original.stereo);
-    
+
       const handleStereoChange = async (newStereo: boolean) => {
         setStereo(newStereo);
-    
+
         try {
           // Call the API to update the stereo status in the database
-          const response = await fetch(`/api/inventory/sound-inventory?id=${row.original.id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              stereo: newStereo, // Update the stereo status only
-            }),
-          });
-    
+          const response = await fetch(
+            `/api/inventory/sound-inventory?id=${row.original.id}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                stereo: newStereo, // Update the stereo status only
+              }),
+            }
+          );
+
           if (response.ok) {
-            console.log('Stereo updated successfully');
+            // console.log('Stereo updated successfully');
           } else {
             console.error('Error updating inventory item');
           }
@@ -537,7 +573,7 @@ export const SoundInventarisColumns = (
           console.error('Error updating stereo status:', error);
         }
       };
-    
+
       const renderStereoBadge = () => {
         return stereo ? (
           <Badge className='bg-blue-600 hover:bg-blue-700'>Stereo</Badge>
@@ -545,7 +581,7 @@ export const SoundInventarisColumns = (
           <Badge className='bg-gray-600 hover:bg-gray-700'>Mono</Badge>
         );
       };
-    
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -553,7 +589,10 @@ export const SoundInventarisColumns = (
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {([true, false] as boolean[]).map((stat) => (
-              <DropdownMenuItem key={stat.toString()} onClick={() => handleStereoChange(stat)}>
+              <DropdownMenuItem
+                key={stat.toString()}
+                onClick={() => handleStereoChange(stat)}
+              >
                 {stat ? 'Stereo' : 'Mono'}
               </DropdownMenuItem>
             ))}
@@ -561,7 +600,6 @@ export const SoundInventarisColumns = (
         </DropdownMenu>
       );
     },
-    
   },
   {
     accessorKey: 'patch',
@@ -582,7 +620,7 @@ export const SoundInventarisColumns = (
         <SoundInventoryDialog onAddSuccess={fetchInventarisData} />
         <Link href={'/dashboard/inventaris/geluid/catalogus'}>
           <Button>
-          <Pencil /> Catalogus
+            <Pencil /> Catalogus
           </Button>
         </Link>
       </div>

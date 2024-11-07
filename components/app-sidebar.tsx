@@ -7,7 +7,6 @@ import {
   Pentagon,
   Sheet,
   CalendarFold,
-  MessagesSquare,
   House,
 } from 'lucide-react';
 
@@ -34,11 +33,6 @@ const data = {
       title: 'Start',
       url: '/dashboard/',
       icon: House,
-    },
-    {
-      title: 'Berichten',
-      url: '/dashboard/berichten/',
-      icon: MessagesSquare,
     },
     {
       title: 'Evenementen',
@@ -125,7 +119,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

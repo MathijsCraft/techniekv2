@@ -57,7 +57,9 @@ const LightingInventoryDialog: React.FC<LightingInventoryDialogProps> = ({
         setUniverse(1); // Reset fields
         onAddSuccess?.(); // Call the parent callback to refresh data
       } else {
-        setError('Er was een error. Kijk even of de gebruikte tag wel in de catalogus staat.');
+        setError(
+          'Er was een error. Kijk even of de gebruikte tag wel in de catalogus staat.'
+        );
       }
     } catch (err) {
       setError('An unexpected error occurred.');

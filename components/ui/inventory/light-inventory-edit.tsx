@@ -44,72 +44,68 @@ type LightInventoryEditDialogProps = {
 const LightInventoryEditDialog: React.FC<LightInventoryEditDialogProps> = ({
   inventoryItem,
   onUpdateSuccess,
-  onDeleteSuccess
+  onDeleteSuccess,
 }) => {
-  const [tag, setTag] = useState('');
   const [number, setNumber] = useState(1);
   const [locatie, setLocatie] = useState('');
   const [status, setStatus] = useState('WERKEND'); // Default status
   const [dmx, setDmx] = useState(1);
   const [universe, setUniverse] = useState(1);
-  const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (inventoryItem) {
-      setTag(inventoryItem.tag || '');
       setNumber(inventoryItem.number || 1);
-      setLocatie(inventoryItem.locatie || ''); 
-      setStatus(inventoryItem.status || 'WERKEND'); 
-      setDmx(inventoryItem.dmx || 1); 
-      setUniverse(inventoryItem.universe || 1); 
+      setLocatie(inventoryItem.locatie || '');
+      setStatus(inventoryItem.status || 'WERKEND');
+      setDmx(inventoryItem.dmx || 1);
+      setUniverse(inventoryItem.universe || 1);
     }
   }, [inventoryItem]);
 
   const handleSubmit = async () => {
-    setError(null); 
     try {
-      const response = await fetch(`/api/inventory/light-inventory?id=${inventoryItem.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: inventoryItem.id,
-          number,
-          locatie,
-          status,
-          dmx,
-          universe,
-        }),
-      });
-  
+      const response = await fetch(
+        `/api/inventory/light-inventory?id=${inventoryItem.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: inventoryItem.id,
+            number,
+            locatie,
+            status,
+            dmx,
+            universe,
+          }),
+        }
+      );
+
       if (response.ok) {
-        setTag('');
         setNumber(1);
         setLocatie('');
         setStatus('WERKEND');
         setDmx(1);
         setUniverse(1);
-        
+
         onUpdateSuccess();
         setOpen(false);
-      } else {
-        setError('Er was een error, probeer het later opnieuw.');
       }
     } catch (err) {
-      setError('An unexpected error occurred.');
       console.error(err);
     }
   };
 
   const handleDelete = async () => {
-    setIsDeleting(true); // Indicate that deletion is in progress
     try {
-      const response = await fetch(`/api/inventory/light-inventory?id=${inventoryItem.id}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `/api/inventory/light-inventory?id=${inventoryItem.id}`,
+        {
+          method: 'DELETE',
+        }
+      );
 
       if (response.ok) {
         onDeleteSuccess(); // Call the success callback to refresh data or show success message
@@ -120,7 +116,6 @@ const LightInventoryEditDialog: React.FC<LightInventoryEditDialogProps> = ({
     } catch (err) {
       console.error('An unexpected error occurred while deleting:', err);
     } finally {
-      setIsDeleting(false); // Reset the deleting state
     }
   };
 

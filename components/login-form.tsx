@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import {
   Card,
   CardContent,
@@ -30,9 +29,9 @@ export function LoginForm() {
   return (
     <Card className='mx-auto max-w-sm'>
       <CardHeader>
-        <CardTitle className='text-2xl'>Login</CardTitle>
+        <CardTitle className='text-2xl'>Log in</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account
+          Vul je email en wachtwoord in om in te loggen
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -49,7 +48,7 @@ export function LoginForm() {
             />
           </div>
           <div className='grid gap-2'>
-            <Label htmlFor='password'>Password</Label>
+            <Label htmlFor='password'>Wachtwoord</Label>
             <Input
               id='password'
               type='password'

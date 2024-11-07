@@ -44,7 +44,7 @@ type SoundInventoryEditDialogProps = {
 const SoundInventoryEditDialog: React.FC<SoundInventoryEditDialogProps> = ({
   inventoryItem,
   onUpdateSuccess,
-  onDeleteSuccess
+  onDeleteSuccess,
 }) => {
   const [tag, setTag] = useState('');
   const [number, setNumber] = useState(1);
@@ -52,39 +52,39 @@ const SoundInventoryEditDialog: React.FC<SoundInventoryEditDialogProps> = ({
   const [status, setStatus] = useState<Status>('WERKEND'); // Default status
   const [patch, setPatch] = useState(''); // New state for sound patch
   const [stereo, setStereo] = useState(false); // New state for stereo
-  const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (inventoryItem) {
       setTag(inventoryItem.tag || '');
       setNumber(inventoryItem.number || 1);
-      setLocatie(inventoryItem.locatie || ''); 
-      setStatus(inventoryItem.status || 'WERKEND'); 
+      setLocatie(inventoryItem.locatie || '');
+      setStatus(inventoryItem.status || 'WERKEND');
       setPatch(inventoryItem.patch || ''); // Initialize patch
       setStereo(inventoryItem.stereo || false); // Initialize stereo
     }
   }, [inventoryItem]);
 
   const handleSubmit = async () => {
-    setError(null); 
     try {
-      const response = await fetch(`/api/inventory/sound-inventory?id=${inventoryItem.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: inventoryItem.id,
-          number,
-          locatie,
-          status,
-          patch,
-          stereo,
-        }),
-      });
-  
+      const response = await fetch(
+        `/api/inventory/sound-inventory?id=${inventoryItem.id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: inventoryItem.id,
+            number,
+            locatie,
+            status,
+            patch,
+            stereo,
+          }),
+        }
+      );
+
       if (response.ok) {
         setTag('');
         setNumber(1);
@@ -92,24 +92,24 @@ const SoundInventoryEditDialog: React.FC<SoundInventoryEditDialogProps> = ({
         setStatus('WERKEND');
         setPatch('');
         setStereo(false);
-        
+
         onUpdateSuccess();
         setOpen(false);
       } else {
-        setError('Er was een error, probeer het later opnieuw.');
       }
     } catch (err) {
-      setError('An unexpected error occurred.');
       console.error(err);
     }
   };
 
   const handleDelete = async () => {
-    setIsDeleting(true); // Indicate that deletion is in progress
     try {
-      const response = await fetch(`/api/inventory/sound-inventory?id=${inventoryItem.id}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `/api/inventory/sound-inventory?id=${inventoryItem.id}`,
+        {
+          method: 'DELETE',
+        }
+      );
 
       if (response.ok) {
         onDeleteSuccess(); // Call the success callback to refresh data or show success message
@@ -120,7 +120,6 @@ const SoundInventoryEditDialog: React.FC<SoundInventoryEditDialogProps> = ({
     } catch (err) {
       console.error('An unexpected error occurred while deleting:', err);
     } finally {
-      setIsDeleting(false); // Reset the deleting state
     }
   };
 
@@ -137,7 +136,7 @@ const SoundInventoryEditDialog: React.FC<SoundInventoryEditDialogProps> = ({
         </DialogHeader>
         <div className='grid gap-4 py-4'>
           <div className='grid grid-cols-2 gap-8'>
-          <div>
+            <div>
               <Label htmlFor='tag'>Tag</Label>
               <Input
                 id='tag'
@@ -187,19 +186,19 @@ const SoundInventoryEditDialog: React.FC<SoundInventoryEditDialogProps> = ({
               />
             </div>
             <div>
-            <Label htmlFor='stereo'>Stereo</Label>
-      <Select
-        value={stereo ? 'STEREO' : 'MONO'} // Convert boolean to string for the Select component
-        onValueChange={(value) => setStereo(value === 'STEREO')} // Convert string back to boolean
-      >
-        <SelectTrigger className='w-full rounded-md border'>
-          <SelectValue placeholder='Select Stereo/Mono' />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value='STEREO'>Stereo</SelectItem>
-          <SelectItem value='MONO'>Mono</SelectItem>
-        </SelectContent>
-      </Select>
+              <Label htmlFor='stereo'>Stereo</Label>
+              <Select
+                value={stereo ? 'STEREO' : 'MONO'} // Convert boolean to string for the Select component
+                onValueChange={(value) => setStereo(value === 'STEREO')} // Convert string back to boolean
+              >
+                <SelectTrigger className='w-full rounded-md border'>
+                  <SelectValue placeholder='Select Stereo/Mono' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='STEREO'>Stereo</SelectItem>
+                  <SelectItem value='MONO'>Mono</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
@@ -215,8 +214,8 @@ const SoundInventoryEditDialog: React.FC<SoundInventoryEditDialogProps> = ({
                   Weet je zeker dat je wilt verwijderen?
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                  Deze actie kan niet ongedaan gemaakt worden. Dit zal het geluidselement
-                  permanent verwijderen.
+                  Deze actie kan niet ongedaan gemaakt worden. Dit zal het
+                  geluidselement permanent verwijderen.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

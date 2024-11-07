@@ -25,15 +25,16 @@ import { Inventory } from '@/lib/types';
 export default function Page() {
   const [data, setData] = useState<Inventory[]>([]); // State to hold inventory data
   const [loading, setLoading] = useState(true); // State to manage loading status
-  const [error, setError] = useState<string | null>(null); // State for error handling
 
   // Function to fetch data from the server
   const fetchInventarisData = async () => {
+    setLoading(true); // Set loading to false after fetching
     try {
       const response = await fetch('/api/inventory/light-inventory'); // Adjust API route if needed
       if (response.ok) {
         const catalogData = await response.json();
         setData(catalogData);
+        setLoading(false); // Set loading to false after fetching
       } else {
         console.error('Failed to fetch catalog data');
       }
@@ -75,8 +76,11 @@ export default function Page() {
           </div>
         </header>
         <div className='flex flex-1 flex-col gap-4 p-4 pt-0'>
-          <Suspense>
-          <DataTable columns={LichtInventarisColumns(fetchInventarisData)} data={data} />
+          <Suspense fallback={loading && <div>Loading...</div>}>
+            <DataTable
+              columns={LichtInventarisColumns(fetchInventarisData)}
+              data={data}
+            />
           </Suspense>
         </div>
       </SidebarInset>

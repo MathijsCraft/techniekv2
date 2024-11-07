@@ -68,7 +68,9 @@ const SoundCatalogEditDialog: React.FC<SoundCatalogEditDialogProps> = ({
         setErrorMessage('Er was een error, probeer het later opnieuw.'); // Set error message for UI
       }
     } catch (err) {
-      setErrorMessage('An unexpected error occurred: ' + (err as Error).message);
+      setErrorMessage(
+        'An unexpected error occurred: ' + (err as Error).message
+      );
       console.error('An unexpected error occurred:', err);
     }
   };
@@ -88,10 +90,14 @@ const SoundCatalogEditDialog: React.FC<SoundCatalogEditDialogProps> = ({
         setIsOpen(false); // Close the dialog after deleting
         setErrorMessage(null); // Clear any previous error messages
       } else {
-        setErrorMessage('Er was een error, waarschijnlijk is deze tag in gebruik.'); // Set error message for UI
+        setErrorMessage(
+          'Er was een error, waarschijnlijk is deze tag in gebruik.'
+        ); // Set error message for UI
       }
     } catch (err) {
-      setErrorMessage('An unexpected error occurred: ' + (err as Error).message);
+      setErrorMessage(
+        'An unexpected error occurred: ' + (err as Error).message
+      );
       console.error('An unexpected error occurred:', err);
     }
   };
@@ -162,7 +168,7 @@ const SoundCatalogEditDialog: React.FC<SoundCatalogEditDialogProps> = ({
         </div>
         {/* Render error message if it exists */}
         {errorMessage && (
-          <div className="error-message text-red-600">
+          <div className='error-message text-red-600'>
             <p>{errorMessage}</p>
           </div>
         )}
@@ -180,8 +186,8 @@ const SoundCatalogEditDialog: React.FC<SoundCatalogEditDialogProps> = ({
                   Weet je zeker dat je wilt verwijderen?
                 </AlertDialogTitle>
                 <AlertDialogDescription>
-                  Deze actie kan niet ongedaan gemaakt worden. Dit zal het geluid
-                  permanent verwijderen.
+                  Deze actie kan niet ongedaan gemaakt worden. Dit zal het
+                  geluid permanent verwijderen.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

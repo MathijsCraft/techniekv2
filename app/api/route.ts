@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth/next';
 import { NextResponse } from 'next/server';
 import { authOptions } from './auth/[...nextauth]/route';
 
-export async function GET(request: Request) {
+export async function GET() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -11,6 +11,6 @@ export async function GET(request: Request) {
     });
   }
 
-  console.log('GET API', session);
+  // console.log('GET API', session);
   return NextResponse.json({ authenticated: !!session });
 }

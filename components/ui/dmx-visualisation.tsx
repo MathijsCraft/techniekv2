@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 
 // Define an interface for your inventory items
 interface InventoryItem {
@@ -20,11 +20,12 @@ interface InventoryItem {
 
 const columns = 25;
 const rows = 21;
-const totalSquares = columns * rows; // 25 x 21 = 525
 const squares = Array.from({ length: 512 }, (_, i) => i + 1); // Only render up to Block 512
 
 export default function DMXVisualization() {
-  const [channelData, setChannelData] = useState<{ [key: number]: InventoryItem[] }>({});
+  const [channelData, setChannelData] = useState<{
+    [key: number]: InventoryItem[];
+  }>({});
   const [selectedUniverse, setSelectedUniverse] = useState<number | null>(null);
   const [universes, setUniverses] = useState<number[]>([]); // Track existing universes
   const [exceeds512, setExceeds512] = useState(false); // Track if any fixture goes beyond 512
@@ -36,7 +37,11 @@ export default function DMXVisualization() {
 
       // Use a Set to find unique universes
       const uniqueUniverses = Array.from(
-        new Set(data.filter((inventory) => inventory.universe !== 0).map((inventory) => inventory.universe))
+        new Set(
+          data
+            .filter((inventory) => inventory.universe !== 0)
+            .map((inventory) => inventory.universe)
+        )
       );
       setUniverses(uniqueUniverses);
     };
@@ -83,25 +88,32 @@ export default function DMXVisualization() {
 
   return (
     <TooltipProvider>
-      <div className="flex flex-col items-center">
-        <label htmlFor="universeSelect" className="mb-2">Selecteer Universe:</label>
+      <div className='flex flex-col items-center'>
+        <label htmlFor='universeSelect' className='mb-2'>
+          Selecteer Universe:
+        </label>
         <select
-          id="universeSelect"
+          id='universeSelect'
           value={selectedUniverse || ''}
-          onChange={(e) => setSelectedUniverse(e.target.value ? Number(e.target.value) : null)}
-          className="mb-4 p-2 border rounded"
+          onChange={(e) =>
+            setSelectedUniverse(e.target.value ? Number(e.target.value) : null)
+          }
+          className='mb-4 rounded border p-2'
         >
-          <option value="">Alle Universes</option>
+          <option value=''>Alle Universes</option>
           {universes.map((universe) => (
-            <option key={universe} value={universe}>{`Universe ${universe}`}</option>
+            <option
+              key={universe}
+              value={universe}
+            >{`Universe ${universe}`}</option>
           ))}
         </select>
 
-        <div 
-          className="grid gap-1 w-max mx-auto" 
-          style={{ 
+        <div
+          className='mx-auto grid w-max gap-1'
+          style={{
             gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`
+            gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
           }}
         >
           {squares.map((square) => {
@@ -124,7 +136,7 @@ export default function DMXVisualization() {
               <Tooltip key={square}>
                 <TooltipTrigger asChild>
                   <div
-                    className={`w-8 h-8 flex items-center justify-center text-xs font-semibold rounded-sm ${squareColor}`}
+                    className={`flex h-8 w-8 items-center justify-center rounded-sm text-xs font-semibold ${squareColor}`}
                   >
                     {count > 0 ? square : ''}
                   </div>
@@ -132,7 +144,9 @@ export default function DMXVisualization() {
                 {count > 0 && (
                   <TooltipContent>
                     {fixtures.map((fixture, index) => (
-                      <p key={index}>{`${fixture.label.tag} - ${fixture.number}`}</p>
+                      <p
+                        key={index}
+                      >{`${fixture.label.tag} - ${fixture.number}`}</p>
                     ))}
                   </TooltipContent>
                 )}

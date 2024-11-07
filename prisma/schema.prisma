@@ -25,6 +25,12 @@ enum Status {
   DEFECT
 }
 
+enum ProjectStatus {
+  AANVRAAG
+  GOEDGEKEURD
+  AFGEROND
+}
+
 // User model to manage admin accounts
 model User {
   id        String    @id @default(cuid()) @db.VarChar(255)

@@ -5,7 +5,6 @@ import { fetchICalEvents } from '@/lib/googleCalendar';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -13,9 +12,6 @@ import {
 } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar, Clock } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { Button } from '@/components/ui/button';
-import { ToastAction } from '@/components/ui/toast';
 
 type Event = {
   id: string;
