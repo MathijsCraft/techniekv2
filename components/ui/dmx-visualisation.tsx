@@ -1,4 +1,5 @@
 // components/DMXVisualization.tsx
+
 import { useEffect, useState } from 'react';
 import {
   Tooltip,
@@ -7,53 +8,44 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-// Define an interface for your inventory items
 interface InventoryItem {
-  dmx: number; // The starting DMX address
-  universe: number; // The universe the fixture belongs to
+  dmx: number;
+  universe: number;
   label: {
-    dmx: number; // The number of DMX addresses the fixture uses
-    tag: string; // The tag identifier of the fixture
+    dmx: number;
+    tag: string;
   };
-  number: number; // Fixture number (if relevant)
+  number: number;
 }
 
 const columns = 25;
 const rows = 21;
-const squares = Array.from({ length: 512 }, (_, i) => i + 1); // Only render up to Block 512
+const squares = Array.from({ length: 512 }, (_, i) => i + 1);
 
 export default function DMXVisualization() {
-  const [channelData, setChannelData] = useState<{
-    [key: number]: InventoryItem[];
-  }>({});
+  const [channelData, setChannelData] = useState<{ [key: number]: InventoryItem[] }>({});
   const [selectedUniverse, setSelectedUniverse] = useState<number | null>(null);
-  const [universes, setUniverses] = useState<number[]>([]); // Track existing universes
-  const [exceeds512, setExceeds512] = useState(false); // Track if any fixture goes beyond 512
+  const [universes, setUniverses] = useState<number[]>([]);
+  const [exceeds512, setExceeds512] = useState(false);
 
   useEffect(() => {
+    // Fetch the list of available universes
     const fetchUniverses = async () => {
-      const res = await fetch('/api/dmx'); // Fetch all inventories to get universes
-      const data: InventoryItem[] = await res.json(); // Type the fetched data
-
-      // Use a Set to find unique universes
-      const uniqueUniverses = Array.from(
-        new Set(
-          data
-            .filter((inventory) => inventory.universe !== 0)
-            .map((inventory) => inventory.universe)
-        )
-      );
-      setUniverses(uniqueUniverses);
+      const res = await fetch('/api/dmx/universes');
+      const data: number[] = await res.json();
+      setUniverses(data.filter((universe) => universe !== 0));
     };
 
     fetchUniverses();
   }, []);
 
   useEffect(() => {
+    // Fetch the data for the selected universe
     const fetchData = async () => {
-      const query = selectedUniverse ? `?universe=${selectedUniverse}` : '';
-      const res = await fetch(`/api/dmx${query}`);
+      const endpoint = selectedUniverse !== null ? `/api/dmx/${selectedUniverse}` : '/api/dmx';
+      const res = await fetch(endpoint);
       const data: InventoryItem[] = await res.json();
+
       const channelCount: { [key: number]: InventoryItem[] } = {};
       let exceeds = false;
 
@@ -62,18 +54,12 @@ export default function DMXVisualization() {
         const addresses = inventory.label.dmx;
         const endChannel = startChannel + addresses - 1;
 
-        // Check if this fixture extends beyond channel 512
-        if (endChannel > 512) {
-          exceeds = true;
-        }
+        if (endChannel > 512) exceeds = true;
 
-        // Populate channel data for each address the fixture uses
         for (let i = 0; i < addresses; i++) {
           const channel = startChannel + i;
           if (channel <= 512) {
-            if (!channelCount[channel]) {
-              channelCount[channel] = [];
-            }
+            if (!channelCount[channel]) channelCount[channel] = [];
             channelCount[channel].push(inventory);
           }
         }
@@ -95,17 +81,12 @@ export default function DMXVisualization() {
         <select
           id='universeSelect'
           value={selectedUniverse || ''}
-          onChange={(e) =>
-            setSelectedUniverse(e.target.value ? Number(e.target.value) : null)
-          }
+          onChange={(e) => setSelectedUniverse(e.target.value ? Number(e.target.value) : null)}
           className='mb-4 rounded border p-2'
         >
           <option value=''>Alle Universes</option>
           {universes.map((universe) => (
-            <option
-              key={universe}
-              value={universe}
-            >{`Universe ${universe}`}</option>
+            <option key={universe} value={universe}>{`Universe ${universe}`}</option>
           ))}
         </select>
 
@@ -121,9 +102,8 @@ export default function DMXVisualization() {
             const count = fixtures.length;
             let squareColor = '';
 
-            // Set the color for each channel based on the number of fixtures
             if (square === 512 && exceeds512) {
-              squareColor = 'bg-red-300 text-red-800'; // Red for overflow on Block 512
+              squareColor = 'bg-red-300 text-red-800';
             } else if (count === 1) {
               squareColor = 'bg-green-200 text-green-800';
             } else if (count > 1) {
@@ -135,18 +115,14 @@ export default function DMXVisualization() {
             return (
               <Tooltip key={square}>
                 <TooltipTrigger asChild>
-                  <div
-                    className={`flex h-8 w-8 items-center justify-center rounded-sm text-xs font-semibold ${squareColor}`}
-                  >
+                  <div className={`flex h-8 w-8 items-center justify-center rounded-sm text-xs font-semibold ${squareColor}`}>
                     {count > 0 ? square : ''}
                   </div>
                 </TooltipTrigger>
                 {count > 0 && (
                   <TooltipContent>
                     {fixtures.map((fixture, index) => (
-                      <p
-                        key={index}
-                      >{`${fixture.label.tag} - ${fixture.number}`}</p>
+                      <p key={index}>{`${fixture.label.tag} - ${fixture.number}`}</p>
                     ))}
                   </TooltipContent>
                 )}
