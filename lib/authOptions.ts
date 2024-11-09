@@ -1,4 +1,3 @@
-// src/lib/authOptions.ts
 import { prisma } from '@/lib/prisma';
 import { compare } from 'bcrypt';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -37,10 +36,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const isPasswordValid = await compare(
-          credentials.password,
-          user.password
-        );
+        const isPasswordValid = await compare(credentials.password, user.password);
 
         if (!isPasswordValid) {
           return null;
