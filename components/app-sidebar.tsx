@@ -1,3 +1,4 @@
+// AppSidebar.tsx
 'use client';
 
 import * as React from 'react';
@@ -11,7 +12,7 @@ import {
 } from 'lucide-react';
 
 import { NavMain } from '@/components/nav-main';
-import { NavUser } from '@/components/nav-user';
+import NavUser from '@/components/nav-user';
 import {
   Sidebar,
   SidebarContent,
@@ -23,17 +24,8 @@ import {
 } from '@/components/ui/sidebar';
 
 const data = {
-  user: {
-    name: 'Mathijs',
-    email: 'mvdb0207@gmail.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
   navMain: [
-    {
-      title: 'Start',
-      url: '/dashboard/',
-      icon: House,
-    },
+    { title: 'Start', url: '/dashboard/', icon: House },
     {
       title: 'Evenementen',
       url: '/dashboard/evenementen/',
@@ -44,14 +36,8 @@ const data = {
       url: '/dashboard/inventaris/licht',
       icon: Package,
       items: [
-        {
-          title: 'Licht',
-          url: '/dashboard/inventaris/licht',
-        },
-        {
-          title: 'Geluid',
-          url: '/dashboard/inventaris/geluid',
-        },
+        { title: 'Licht', url: '/dashboard/inventaris/licht' },
+        { title: 'Geluid', url: '/dashboard/inventaris/geluid' },
       ],
     },
     {
@@ -59,10 +45,7 @@ const data = {
       url: '/dashboard/data/',
       icon: Sheet,
       items: [
-        {
-          title: 'Licht - DMX Plan',
-          url: '/dashboard/data/licht/dmx-plan',
-        },
+        { title: 'Licht - DMX Plan', url: '/dashboard/data/licht/dmx-plan' },
         {
           title: 'Geluid - Prik Plan',
           url: '/dashboard/data/geluid/prik-plan',
@@ -74,28 +57,23 @@ const data = {
       url: '#',
       icon: BookOpen,
       items: [
-        {
-          title: 'Licht - Controle Paneel',
-          url: '#',
-        },
-        {
-          title: 'Licht - Fixtures',
-          url: '#',
-        },
-        {
-          title: 'Geluid - Mengpaneel',
-          url: '#',
-        },
-        {
-          title: 'Geluid - Apparatuur',
-          url: '#',
-        },
+        { title: 'Licht - Controle Paneel', url: '#' },
+        { title: 'Licht - Fixtures', url: '#' },
+        { title: 'Geluid - Mengpaneel', url: '#' },
+        { title: 'Geluid - Apparatuur', url: '#' },
       ],
     },
   ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  user: {
+    name: string;
+    email: string;
+  };
+}
+
+export function AppSidebar({ user, ...props }: AppSidebarProps) {
   return (
     <Sidebar variant='inset' {...props}>
       <SidebarHeader>
@@ -119,7 +97,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );

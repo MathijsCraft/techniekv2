@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Providers } from '@/components/providers/session';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
 
@@ -18,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang='nl'>
       <body className={`${inter.className} antialiased`}>
-        <Providers>{children}</Providers>
+        {children}
         <Toaster />
       </body>
     </html>

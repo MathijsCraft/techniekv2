@@ -12,8 +12,7 @@ export async function GET() {
       distinct: ['universe'],
     });
 
-    const uniqueUniverses = universes
-      .map((item) => item.universe)
+    const uniqueUniverses = universes.map((item) => item.universe);
 
     return NextResponse.json(uniqueUniverses);
   } catch (error) {

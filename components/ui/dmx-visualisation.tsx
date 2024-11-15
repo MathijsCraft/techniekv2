@@ -23,7 +23,9 @@ const rows = 21;
 const squares = Array.from({ length: 512 }, (_, i) => i + 1);
 
 export default function DMXVisualization() {
-  const [channelData, setChannelData] = useState<{ [key: number]: InventoryItem[] }>({});
+  const [channelData, setChannelData] = useState<{
+    [key: number]: InventoryItem[];
+  }>({});
   const [selectedUniverse, setSelectedUniverse] = useState<number | null>(null);
   const [universes, setUniverses] = useState<number[]>([]);
   const [exceeds512, setExceeds512] = useState(false);
@@ -42,7 +44,8 @@ export default function DMXVisualization() {
   useEffect(() => {
     // Fetch the data for the selected universe
     const fetchData = async () => {
-      const endpoint = selectedUniverse !== null ? `/api/dmx/${selectedUniverse}` : '/api/dmx';
+      const endpoint =
+        selectedUniverse !== null ? `/api/dmx/${selectedUniverse}` : '/api/dmx';
       const res = await fetch(endpoint);
       const data: InventoryItem[] = await res.json();
 
@@ -81,12 +84,17 @@ export default function DMXVisualization() {
         <select
           id='universeSelect'
           value={selectedUniverse || ''}
-          onChange={(e) => setSelectedUniverse(e.target.value ? Number(e.target.value) : null)}
+          onChange={(e) =>
+            setSelectedUniverse(e.target.value ? Number(e.target.value) : null)
+          }
           className='mb-4 rounded border p-2'
         >
           <option value=''>Alle Universes</option>
           {universes.map((universe) => (
-            <option key={universe} value={universe}>{`Universe ${universe}`}</option>
+            <option
+              key={universe}
+              value={universe}
+            >{`Universe ${universe}`}</option>
           ))}
         </select>
 
@@ -115,14 +123,18 @@ export default function DMXVisualization() {
             return (
               <Tooltip key={square}>
                 <TooltipTrigger asChild>
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-sm text-xs font-semibold ${squareColor}`}>
+                  <div
+                    className={`flex h-8 w-8 items-center justify-center rounded-sm text-xs font-semibold ${squareColor}`}
+                  >
                     {count > 0 ? square : ''}
                   </div>
                 </TooltipTrigger>
                 {count > 0 && (
                   <TooltipContent>
                     {fixtures.map((fixture, index) => (
-                      <p key={index}>{`${fixture.label.tag} - ${fixture.number}`}</p>
+                      <p
+                        key={index}
+                      >{`${fixture.label.tag} - ${fixture.number}`}</p>
                     ))}
                   </TooltipContent>
                 )}

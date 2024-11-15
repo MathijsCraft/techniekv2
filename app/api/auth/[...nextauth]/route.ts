@@ -1,12 +1,5 @@
 import NextAuth from 'next-auth';
-import { authOptions } from '@/lib/authOptions';
-import { NextRequest, NextResponse } from 'next/server';
+import { authOptions } from './options';
 
-// API route handler
-export async function GET(req: NextRequest) {
-  return NextAuth(authOptions)(req, NextResponse);
-}
-
-export async function POST(req: NextRequest) {
-  return NextAuth(authOptions)(req, NextResponse);
-}
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

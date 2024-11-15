@@ -4,14 +4,14 @@ import { hashSync } from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-  const password = hashSync('rZ?kA(61@42+', 12);
+  const password = hashSync('123456', 12);
   const user = await prisma.user.upsert({
-    where: { email: 'mike_oscar1@hotmail.com' },
+    where: { email: 'mvdb0207@gmail.com' },
     update: {},
     create: {
-      name: 'Mike Verkaik',
-      email: 'mike_oscar1@hotmail.com',
-      role: 'TEAM',
+      name: 'Mathijs van den Berg',
+      email: 'mvdb0207@gmail.com',
+      role: 'SUPER_ADMIN',
       password: password,
     },
   });

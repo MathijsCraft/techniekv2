@@ -1,8 +1,8 @@
-// src/lib/authOptions.ts
-import { prisma } from '@/lib/prisma';
-import { compare } from 'bcrypt';
+import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { NextAuthOptions } from 'next-auth';
+import { compare } from 'bcrypt';
+import { prisma } from '@/lib/prisma';
+import { User } from '@prisma/client';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -13,7 +13,7 @@ export const authOptions: NextAuthOptions = {
   },
   providers: [
     CredentialsProvider({
-      name: 'Log In',
+      name: 'Sign In',
       credentials: {
         email: {
           label: 'Email',
@@ -66,7 +66,7 @@ export const authOptions: NextAuthOptions = {
     },
     jwt: ({ token, user }) => {
       if (user) {
-        const u = user as { id: string };
+        const u = user as unknown as User;
         return {
           ...token,
           id: u.id,
